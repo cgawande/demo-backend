@@ -21,3 +21,5 @@
 {"level":"info","message":"Server is running at 8088 port","timestamp":"2023-11-25T17:23:46.942Z"}
 {"level":"info","message":"Server is running at 8088 port","timestamp":"2023-11-25T17:25:11.617Z"}
 {"level":"info","message":"Database connected successfully","timestamp":"2023-11-25T17:25:11.761Z"}
+{"level":"info","message":"Server is running at 8088 port","timestamp":"2023-11-25T18:25:07.453Z"}
+{"level":"info","message":"Database connected successfully","timestamp":"2023-11-25T18:25:09.122Z"}

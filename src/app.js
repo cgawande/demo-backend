@@ -14,6 +14,7 @@ const app = express();
 const { NODE_ENV } = process.env;
 // const isProduction = NODE_ENV === 'production';
 app.set('views', join(__dirname, 'ejs'));
+app.set('view engine', 'ejs');
 // Middlewares
 // CORS middleware
 app.use((req, res, next) => {
@@ -35,6 +36,9 @@ app.set('port', utils.getEnv('APP_PORT'));
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/assets', express.static(`${resolve()}/uploads`));
+app.use('/images', express.static(`${resolve()}/images`));
+app.use('/public', express.static(`${resolve()}/public`));
 app.use(cors());
 
 // API Routes
