@@ -11,7 +11,8 @@
     "init:seed:undo": "node ./src/scripts/init-seeder-undo.js",
     "migration": "npx sequelize-cli db:migrate",
     "init:db": "npx sequelize-cli db:drop && npx sequelize-cli db:create",
-    "migrate:undo": "npx sequelize-cli db:migrate:undo"
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "build": "babel src -d dist"
   },
   "author": "",
   "license": "ISC",

@@ -315,7 +315,7 @@ module.exports.dayGet = (date) => {
 module.exports.getPreviousDateTime = (months = 3) => {
   try {
     const threeMonthsAgo = new Date();
-    threeMonthsAgo.setDate(01)
+    threeMonthsAgo.setDate(1)
     return moment(
       threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - months)
     ).format('YYYY-MM-DD 00:00:00');

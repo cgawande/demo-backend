@@ -2,7 +2,7 @@
 /.env
 /env
 
-
+/dist
 
 # misc
 .DS_Store
