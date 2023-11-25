@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
-const path = require('path');
+const { resolve, join } = require('path');
 
 const { logger } = require('./services/logger.service.js')
 const utils = require('./utils/index.js');
@@ -13,7 +13,7 @@ const { loggerInfoMessage,loggerErrorMessage } = require('./logMessages/index.js
 const app = express();
 const { NODE_ENV } = process.env;
 // const isProduction = NODE_ENV === 'production';
-
+app.set('views', join(__dirname, 'ejs'));
 // Middlewares
 // CORS middleware
 app.use((req, res, next) => {
@@ -54,7 +54,6 @@ router(app);
 // );
 
 app.use((error, req, res, next) => {
-  console.log(error)
   const internalError = utils.httpStatus('INTERNAL_SERVER_ERROR');
   if (error) {
     loggerErrorMessage(null, { error });
