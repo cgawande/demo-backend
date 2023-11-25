@@ -10,7 +10,6 @@ const utils = require('./utils/index.js');
 const router = require('./v1/routes/index');
 const services = require('./services/index.js');
 const { loggerInfoMessage,loggerErrorMessage } = require('./logMessages/index.js');
-
 const app = express();
 const { NODE_ENV } = process.env;
 // const isProduction = NODE_ENV === 'production';
