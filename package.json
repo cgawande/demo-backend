@@ -1,0 +1,45 @@
+{
+  "name": "demoprojectsetup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js",
+    "seed": "npx sequelize-cli db:seed:all",
+    "init:seed": "node ./src/scripts/init-seeder.js",
+    "init:seed:undo": "node ./src/scripts/init-seeder-undo.js",
+    "migration": "npx sequelize-cli db:migrate",
+    "init:db": "npx sequelize-cli db:drop && npx sequelize-cli db:create",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "helmet": "^6.1.5",
+    "http-status": "^1.6.2",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.1.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.2.3",
+    "nodemon": "^2.0.22",
+    "sequelize": "^6.31.0",
+    "socket.io": "^4.6.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.2",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.0"
+  }
+}

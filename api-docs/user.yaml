@@ -1,0 +1,42 @@
+paths:
+  /signup:
+    post:
+      tags:
+        - User signup
+      summary: user signup
+      description: <b> Request :- </b> <br /> <br />
+        <b> firstName* </b>  is required <br />
+        <b> lastName* </b>  is required <br />
+        <b> email* </b>  is required <br />
+        <b> password* </b>  is required <br />
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+          "$ref": "#/definitions/user-signup"
+      responses:
+        "201":
+          description: User created sucessfully
+
+definitions:
+  user-signup:
+    type: object
+    properties:
+      firstName:
+        type: string
+        required: true
+      lastName:
+        type: string
+        required: true
+      email:
+        type: string
+        required: true
+      password:
+        type: string
+        required: true
+      role:
+        type: string
+        required: true
