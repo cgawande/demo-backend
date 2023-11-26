@@ -88,7 +88,7 @@ module.exports.checkPassword = async (req, res, next) => {
 
 
 module.exports.checkResetPasswordToken = async (req, res, next) => {
-  const { id, token } = req.params;
+  const { id, token } = req.body;
   try {
     const decodedToken = jwt.verifyToken(token);
     if (decodedToken) {
@@ -110,7 +110,7 @@ module.exports.checkResetPasswordToken = async (req, res, next) => {
 
 module.exports.checkUserIdNotExists = async (req, res, next) => {
   try {
-    const { id, token } = req.params;
+    const { id, token } = req.body;
     const user = await userRepository.findUserExist({_id:id});
     if (!user) {
       return (

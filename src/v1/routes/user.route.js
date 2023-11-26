@@ -42,7 +42,7 @@ router.post(
 );
 
 router.post(
-  "/reset-password/:id/:token",
+  "/reset-password",
   userMiddleWare.checkResetPasswordToken,
   userMiddleWare.checkUserIdNotExists,
   userController.resetPassword,
@@ -51,7 +51,13 @@ router.post(
 router.post(
   "/register/sub_admin",
   authMiddleware.checkUserAuth,
+  userMiddleWare.checkUserEmailExistsAlready,
+  validateMiddleware(accountValidator.userAccountSignUpSchema),
   middlewares.resourceAccessMiddleware(["admin"]),
+  (req, res, next) => {
+    req.body.role = "sub-admin";
+    next();
+  },
   userController.createUserSignUP
 );
 

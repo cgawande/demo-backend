@@ -18,7 +18,7 @@ const sendEmail = (email, token,id) => {
     subject: "Password reset",
     html: `
         <p> You are requested for password reset</p>
-        <h3>click to this <a href=http://localhost:3000/${id}/${token} >link </a>to reset password</h3>
+        <h3>click to this <a href=https://sponlineservices.netlify.app/reset/${id}/${token} >link </a>to reset password</h3>
         <p> This is only valid for 20 minutes`,
   };
 
