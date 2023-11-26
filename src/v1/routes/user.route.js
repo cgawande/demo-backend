@@ -31,10 +31,22 @@ router.get(
   // authMiddleware.checkUserAuth,
   // middlewares.resourceAccessMiddleware(["admin"]),
   (req, res) => {
-    res.status(200).json({ message: "jh" });
+    res.status(200).json({ message: "hello" });
   }
 );
 
+router.post(
+  "/forgot-password",
+  userMiddleWare.checkUSerEmailNotExists,
+  userController.forgotPassword,
+);
+
+router.post(
+  "/reset-password/:id/:token",
+  userMiddleWare.checkResetPasswordToken,
+  userMiddleWare.checkUserIdNotExists,
+  userController.resetPassword,
+);
 
 router.post(
   "/register/sub_admin",
