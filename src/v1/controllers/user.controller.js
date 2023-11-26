@@ -28,7 +28,6 @@ module.exports.createUserSignUP = async (req, res, next) => {
 module.exports.createUserLogin = async (req, res, next) => {
   try {
     const result = await userRepository.userLogin(req);
-    console.log(result)
     if (result) {
       res.status(utility.httpStatus('OK')).json({
         success: true,
@@ -83,6 +82,27 @@ module.exports.getUserList = async (req, res, next) => {
 module.exports.resetPassword = async(req,res,next)=>{
   try {
     const result = await userRepository.userResetPassword(req);
+    if (result) {
+      res.status(utility.httpStatus('OK')).json({
+        success: true,
+        message: utility.getMessage(req, false, 'SUCCESS'),
+      });
+    } else {
+      res.status(utility.httpStatus('BAD_REQUEST')).json({
+        success: false,
+        data: null,
+        message: utility.getMessage(req, false, 'FALSE_RESPONSE'),
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+
+module.exports.updatePassword=async(req,res,next)=>{
+  try {
+    const result = await userRepository.updatePassword(req);
     if (result) {
       res.status(utility.httpStatus('OK')).json({
         success: true,

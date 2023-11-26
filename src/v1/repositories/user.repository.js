@@ -156,6 +156,23 @@ module.exports.userResetPassword = async (req, res) => {
   }
 };
 
+module.exports.updatePassword = async (req, res) => {
+  const {  newPassword } = req.body;
+  try {
+       const isTrue = await this.findUserAndPasswordUpdate(req.userResult._id, newPassword)
+      if(isTrue){
+        return isTrue
+      }else{
+        return isTrue
+      }
+  } catch (error) {
+    console.log(error)
+    userErrorMessage('forgotPassword', { error, data: user.email });
+    throw Error(error);
+  }
+};
+
+
 module.exports.findUserAndPasswordUpdate = async (id, password) => {
   try {
     const hashPassword = await bcrypt.createHashPassword(password);

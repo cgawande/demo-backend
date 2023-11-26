@@ -52,7 +52,7 @@ module.exports.checkUSerEmailNotExists = async (req, res, next) => {
 
 module.exports.comparePassword = async (req, res, next) => {
   try {
-    const isPasswordMatch = bcrypt.compareUserPassword(req.body.password, req.userResult.password)
+    const isPasswordMatch = await bcrypt.compareUserPassword(req.body.password, req.userResult.password)
     if (isPasswordMatch) {
       next()
     } else {

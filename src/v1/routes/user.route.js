@@ -49,6 +49,13 @@ router.post(
 );
 
 router.post(
+  "/change-password",
+  authMiddleware.checkUserAuth,
+  userMiddleWare.comparePassword,
+  userController.updatePassword,
+);
+
+router.post(
   "/register/sub_admin",
   authMiddleware.checkUserAuth,
   userMiddleWare.checkUserEmailExistsAlready,
