@@ -131,8 +131,6 @@ module.exports.forgotPassword = async (req) => {
     return {
       success: "success",
       message: "Email sent successfully",
-      token: token,
-      userID: req.userResult.id,
     }
   } catch (error) {
     console.log(error)
