@@ -35,6 +35,7 @@ router.get(
   }
 );
 
+
 router.post(
   "/register/sub_admin",
   authMiddleware.checkUserAuth,

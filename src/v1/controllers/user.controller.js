@@ -31,7 +31,8 @@ module.exports.createUserLogin = async (req, res, next) => {
     if (result) {
       res.status(utility.httpStatus('OK')).json({
         success: true,
-        data: result,
+        token:result,
+        data: req.userResult,
         message: utility.getMessage(req, false, 'LOGIN_SUCCESS'),
       });
     } else {
