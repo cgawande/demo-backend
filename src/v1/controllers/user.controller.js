@@ -10,7 +10,7 @@ module.exports.createUserSignUP = async (req, res, next) => {
     if (result) {
       res.status(utility.httpStatus('CREATED')).json({
         success: true,
-        data: success,
+        data: "success",
         message: utility.getMessage(req, false, 'USER_CREATED'),
       });
     } else {
