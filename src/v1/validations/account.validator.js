@@ -166,15 +166,22 @@ const userAccountLoginSchema = {
 
 const userAccountSignUpSchema = {
   body: Joi.object({
-    firstName: Joi.string().trim().min(3).max(24)
-    .label('First Name')
+  //   firstName: Joi.string().trim().min(3).max(24)
+  //   .label('First Name')
+  //   .required(),
+  // lastName: Joi.string().trim().min(3).max(24)
+  //   .label('Last Name')
+  //   .optional()
+  //   .empty()
+  //   .allow(null)
+  //   .allow(''),
+     fullName: Joi.string().trim().min(4).max(100)
+    .label('full Name')
     .required(),
-  lastName: Joi.string().trim().min(3).max(24)
-    .label('Last Name')
-    .optional()
-    .empty()
-    .allow(null)
-    .allow(''),
+  phoneNumber:  Joi.number().integer().min(10 ** 9).max(10 ** 10 - 1).required().messages({
+    'number.min': 'Mobile number should be 10 digit.',
+    'number.max': 'Mobile number should be 10 digit'
+}),
   profilePicture: Joi.string().trim().optional().empty()
     .allow(''),
   password: Joi.string().trim()
@@ -184,6 +191,10 @@ const userAccountSignUpSchema = {
   .messages({
     'string.pattern.base': 'PASSWORD_VALIDATION',
   })
+  .required(),
+  confirmPassword: Joi.string().trim().label('Confirm Password')
+  .valid(Joi.ref('password'))
+  .messages({ 'any.only': 'CONFIRM_PASSWORD_NOT_MATCH' })
   .required(),
   email: Joi.string().trim().email({ minDomainSegments: 2, tlds: { allow: false } }).min(6)
     .max(100)

@@ -14,9 +14,9 @@ const { userModel } = models;
 module.exports.userRegister = async (req) => {
   try {
     //console.log(kjjkjkdfjg)
-    const { password } = req.body;
+    const { password,confirmPassword,...rest} = req.body;
     const hashPassword = await bcrypt.createHashPassword(password);
-    return await userModel.create({ ...req.body, password: hashPassword });
+    return await userModel.create({ ...rest, password: hashPassword });
   } catch (error) {
     // logger('userError').error(new Error(error.message));
     console.log(error)
