@@ -111,7 +111,6 @@ module.exports.checkUserAuth = async (req, res, next) => {
         const decodedToken= jwt.verifyToken(token);
         if(decodedToken){
         req.userResult = isTokenExist;
-        console.log("next")
         next()
         }else{
           const error = new Error('INVALID_TOKEN');
@@ -136,7 +135,6 @@ module.exports.checkUserAuth = async (req, res, next) => {
       next(error);
     }
   } catch (e) {
-    console.log(e)
     const error = new Error('TOKEN_NOT_FOUND');
     error.status = utility.httpStatus('UNAUTHORIZED');
     error.message = utility.getMessage(req, false, 'UNAUTHORIZED_USER_ACCESS'); // 'Format is Authorization: Bearer [token]';
