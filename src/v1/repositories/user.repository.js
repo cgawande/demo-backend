@@ -140,7 +140,7 @@ module.exports.forgotPassword = async (req) => {
 }
 
 module.exports.userResetPassword = async (req, res) => {
-  const { id, token } = req.params;
+  const { id, token } = req.body;
   const { newPassword, confirmPassword } = req.body;
   try {
        const isTrue = await this.findUserAndPasswordUpdate(id, newPassword)
