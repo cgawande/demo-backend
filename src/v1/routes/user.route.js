@@ -56,7 +56,7 @@ router.post(
 );
 
 router.post(
-  "/register/sub_admin",
+  "/register/sub-admin",
   authMiddleware.checkUserAuth,
   userMiddleWare.checkUserEmailExistsAlready,
   validateMiddleware(accountValidator.userAccountSignUpSchema),
