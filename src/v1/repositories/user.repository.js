@@ -35,7 +35,7 @@ module.exports.userLogin = async (req) => {
    const user = req.userResult
       return this.findTokenExistAndUpdate(user)
   } catch (error) {
-   userErrorMessage('addUser', { error, data: req?.body });
+   userErrorMessage('login', { error, data: req?.body });
     throw new Error(error);
   }
 }
@@ -49,7 +49,7 @@ module.exports.findUserExistByEmail = async (email)=>{
     try {
         return await userModel.findOne({email:email})
       } catch (error) {
-        userErrorMessage('details', { error, data:email });
+        userErrorMessage('findUser', { error, data:email });
         throw Error(error);
       }
 }
@@ -59,7 +59,7 @@ module.exports.findTokenExist = async (token) => {
   return await userModel.findOne({token:token})
   }catch(error){
     console.log(error)
-    userErrorMessage('details', { error, data:user.email });
+    userErrorMessage('findUser', { error, data:user.email });
     throw Error(error);
   }
 }
@@ -72,7 +72,7 @@ module.exports.findTokenExistAndUpdate = async (user) => {
     return newtoken;
   } catch (error) {
     console.log(error)
-    userErrorMessage('details', { error, data:user.email });
+    userErrorMessage('findUser', { error, data:user.email });
     throw Error(error);
   }
 }
@@ -84,7 +84,6 @@ module.exports.getUserList = async (req) => {
 
     // Create a base query
     let query = {role:req.role};
-console.log(req.role)
     // If search parameter is provided, use it to filter by username or email
     if (search) {
       query = {
@@ -119,7 +118,7 @@ console.log(req.role)
     });
   } catch (error) {
     console.log(error)
-    userErrorMessage('details', { error, data:req.role });
+    userErrorMessage('userList', { error, data:req.role });
     throw Error(error);
   }
 }

@@ -8,22 +8,28 @@ exports.userErrorMessage = (type, object) => {
   let message = '';
   switch (type) {
     case 'addUser':
-      message = `userBlog add error: ${error}, payload: ${payload}`;
+      message = `user add error: ${error}, payload: ${payload}`;
       break;
-    case 'removeBlog':
-      message = `user removeBlog  error: ${error}, payload: ${payload}`;
+    case 'login':
+      message = `user login error: ${error}, payload: ${payload}`;
+      break;
+    case 'userList':
+      message = `user list error: ${error}, payload: ${payload}`;
+      break;
+    case 'findUser':
+      message = `find user error: ${error}, payload: ${payload}`;
       break;
     case 'getPassword':
       message = `user get password  error: ${error}, payload: ${payload}`;
       break;
-    case 'addDetailsUserBlog':
-      message = `user deatils add error: ${error}, payload: ${payload}`;
+    case 'forgotPassword':
+      message = `user forgot password error: ${error}, payload: ${payload}`;
       break;
     case 'adminAdd':
       message = `Admin add error: ${error}, payload: ${payload}`;
       break;
-    case 'getNcaDocumentList':
-      message = `Get nca document list error: ${error}, payload: ${payload}`;
+    case 'resetPassword':
+      message = `reset password error: ${error}, payload: ${payload}`;
       break;
     case 'personalDetailsAdd':
       message = `Provider personal details add error: ${error}, payload: ${payload}`;

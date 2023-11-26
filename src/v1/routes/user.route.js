@@ -45,7 +45,7 @@ router.post(
 router.get(
   "/users",
   authMiddleware.checkUserAuth,
-  middlewares.resourceAccessMiddleware(["admin", "sub_admin"]),
+  middlewares.resourceAccessMiddleware(["admin"]),
   (req, res, next) => {
     req.role = "user";
     next();
