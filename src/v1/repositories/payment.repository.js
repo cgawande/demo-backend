@@ -50,7 +50,7 @@ module.exports.verifyPayment = async (req) => {
     // Creating our own digest
     // The format should be like this:
     // digest = hmac_sha256(orderCreationId + "|" + razorpayPaymentId, secret);
-    const shasum = crypto.createHmac("sha256", "vg4hIiDeNlV6eGmnIhs3aYG2");
+    const shasum = crypto.createHmac("sha256",process.env.key_secret);
     shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
     const digest = shasum.digest("hex");
     console.log("digest", digest, "razor", razorpaySignature);
