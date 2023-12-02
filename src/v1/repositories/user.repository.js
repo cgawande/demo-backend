@@ -1,9 +1,9 @@
-const { Op, Sequelize } = require('sequelize');
-const models = require('../models/index.js');
-const { userErrorMessage } = require('../../logMessages/index.js');
-const services = require("../../services/index.js")
-const { logger } = require('../../services/logger.service.js')
-const { bcrypt, jwt, sendEmail } = services
+const { Op, Sequelize } = require("sequelize");
+const models = require("../models/index.js");
+const { userErrorMessage } = require("../../logMessages/index.js");
+const services = require("../../services/index.js");
+const { logger } = require("../../services/logger.service.js");
+const { bcrypt, jwt, sendEmail } = services;
 const { userModel } = models;
 
 /**
@@ -19,8 +19,8 @@ module.exports.userRegister = async (req) => {
     return await userModel.create({ ...rest, password: hashPassword });
   } catch (error) {
     // logger('userError').error(new Error(error.message));
-    console.log(error)
-    userErrorMessage('addUser', { error, data: req?.body });
+    console.log(error);
+    userErrorMessage("addUser", { error, data: req?.body });
     throw new Error(error);
   }
 };
@@ -32,13 +32,13 @@ module.exports.userRegister = async (req) => {
  */
 module.exports.userLogin = async (req) => {
   try {
-    const user = req.userResult
-    return this.findTokenExistAndUpdate(user)
+    const user = req.userResult;
+    return this.findTokenExistAndUpdate(user);
   } catch (error) {
-    userErrorMessage('login', { error, data: req?.body });
+    userErrorMessage("login", { error, data: req?.body });
     throw new Error(error);
   }
-}
+};
 
 /**
  * find user by email
@@ -47,41 +47,44 @@ module.exports.userLogin = async (req) => {
  */
 module.exports.findUserExist = async (where) => {
   try {
-    return await userModel.findOne(where)
+    return await userModel.findOne(where);
   } catch (error) {
-    userErrorMessage('findUser', { error, data: where });
+    userErrorMessage("findUser", { error, data: where });
     throw Error(error);
   }
-}
-
+};
 
 module.exports.findTokenExist = async (token) => {
   try {
-    return await userModel.findOne({ token: token })
+    return await userModel.findOne({ token: token });
   } catch (error) {
-    console.log(error)
-    userErrorMessage('findUser', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("findUser", { error, data: user.email });
     throw Error(error);
   }
-}
-
+};
 
 module.exports.findTokenExistAndUpdate = async (user) => {
   try {
-    const newtoken = await jwt.createToken({ userId: user.id }) 
-   await userModel.updateOne({ email: user.email }, { token: newtoken })
-   return newtoken;
+    const newtoken = await jwt.createToken({ userId: user.id });
+    await userModel.updateOne({ email: user.email }, { token: newtoken });
+    return newtoken;
   } catch (error) {
-    console.log(error)
-    userErrorMessage('findUser', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("findUser", { error, data: user.email });
     throw Error(error);
   }
-}
-
+};
 
 module.exports.getUserList = async (req) => {
   try {
-    const { page = 1, limit = 10, search, filterField, filterValue } = req.query;
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      filterField,
+      filterValue,
+    } = req.query;
 
     // Create a base query
     let query = { role: req.role };
@@ -89,10 +92,10 @@ module.exports.getUserList = async (req) => {
     if (search) {
       query = {
         $or: [
-          { username: { $regex: search, $options: 'i' } }, // case-insensitive search
-          { email: { $regex: search, $options: 'i' } },
+          { username: { $regex: search, $options: "i" } }, // case-insensitive search
+          { email: { $regex: search, $options: "i" } },
         ],
-        role: req.role
+        role: req.role,
       };
     }
 
@@ -102,8 +105,9 @@ module.exports.getUserList = async (req) => {
     }
 
     // Perform the query with pagination and excluding the password field
-    const users = await userModel.find(query)
-      .select('-password')
+    const users = await userModel
+      .find(query)
+      .select("-password")
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();
@@ -111,91 +115,100 @@ module.exports.getUserList = async (req) => {
     // Count the total number of documents for pagination
     const totalCount = await userModel.countDocuments(query);
 
-    return ({
+    return {
       users,
       totalPages: Math.ceil(totalCount / limit),
       currentPage: page,
-      totalCount
-    });
+      totalCount,
+    };
   } catch (error) {
-    console.log(error)
-    userErrorMessage('userList', { error, data: req.role });
+    console.log(error);
+    userErrorMessage("userList", { error, data: req.role });
     throw Error(error);
   }
-}
+};
 
 module.exports.forgotPassword = async (req) => {
   try {
     const token = await jwt.createToken({ userId: req.userResult.id });
-   const emailSend = await sendEmail(req.userResult.email, token,req.userResult.id);
+    const emailSend = await sendEmail(
+      req.userResult.email,
+      token,
+      req.userResult.id
+    );
     return {
       success: "success",
       message: "Email sent successfully",
-    }
+    };
   } catch (error) {
-    console.log(error)
-    userErrorMessage('forgotPassword', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("forgotPassword", { error, data: user.email });
     throw Error(error);
   }
-}
+};
 
 module.exports.userResetPassword = async (req, res) => {
   const { id, token } = req.body;
   const { newPassword, confirmPassword } = req.body;
   try {
-       const isTrue = await this.findUserAndPasswordUpdate(id, newPassword)
-      if(isTrue){
-        return isTrue
-      }else{
-        return isTrue
-      }
+    const isTrue = await this.findUserAndPasswordUpdate(id, newPassword);
+    if (isTrue) {
+      return isTrue;
+    } else {
+      return isTrue;
+    }
   } catch (error) {
-    console.log(error)
-    userErrorMessage('forgotPassword', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("forgotPassword", { error, data: user.email });
     throw Error(error);
   }
 };
 
 module.exports.updatePassword = async (req, res) => {
-  const {  newPassword } = req.body;
+  const { newPassword } = req.body;
   try {
-       const isTrue = await this.findUserAndPasswordUpdate(req.userResult._id, newPassword)
-      if(isTrue){
-        return isTrue
-      }else{
-        return isTrue
-      }
+    const isTrue = await this.findUserAndPasswordUpdate(
+      req.userResult._id,
+      newPassword
+    );
+    if (isTrue) {
+      return isTrue;
+    } else {
+      return isTrue;
+    }
   } catch (error) {
-    console.log(error)
-    userErrorMessage('forgotPassword', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("forgotPassword", { error, data: user.email });
     throw Error(error);
   }
 };
 
-
 module.exports.findUserAndPasswordUpdate = async (id, password) => {
   try {
     const hashPassword = await bcrypt.createHashPassword(password);
-     await userModel.findByIdAndUpdate(id, {
+    await userModel.findByIdAndUpdate(id, {
       $set: { password: hashPassword },
     });
-    return true
+    return true;
   } catch (error) {
-    console.log(error)
-    userErrorMessage('findUser', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("findUser", { error, data: user.email });
     throw Error(error);
   }
-}
+};
 
 module.exports.updateWallet = async (req, res) => {
-  const {  amount } = req.body;
+  const { amount } = req.body;
   try {
-    const newAmount = (req?.userResult?.wallet) ?? 0 + amount
-     await userModel.updateOne({ email: req?.userResult?.email }, { $set: { wallet:  newAmount } });
-   return true
+    const newAmount = req?.userResult?.wallet ? req?.userResult?.wallet : 0;
+    await userModel.updateOne(
+      { email: req?.userResult?.email },
+      { $set: { wallet: newAmount + amount } }
+    );
+    return true;
   } catch (error) {
-    console.log(error)
-    userErrorMessage('forgotPassword', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("forgotPassword", { error, data: user.email });
     throw Error(error);
   }
 };
