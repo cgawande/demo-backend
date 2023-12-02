@@ -98,7 +98,7 @@ router.get(
   userController.getUserDataByToken
 );
 
-router.get(
+router.post(
   "/add-wallet",
   authMiddleware.checkUserAuth,
   userController.updateWallet

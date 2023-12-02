@@ -190,10 +190,9 @@ module.exports.findUserAndPasswordUpdate = async (id, password) => {
 module.exports.updateWallet = async (req, res) => {
   const {  amount } = req.body;
   try {
-    const newAmount = (req?.userResult?.wallet) ?? 0 + amount
-    await userModel.findByIdAndUpdate(req.userResult._id, {
-      $set: { wallet: newAmount, },
-    });
+    //const newAmount = (req?.userResult?.wallet) ?? 0 + amount
+     //await userModel.updateOne({ email: "ranjitg739@gmail.com" },{wallet:20});
+     await userModel.updateOne({ email: "ranjitg739@gmail.com" }, { $set: { wallet: 24 } });
    return true
   } catch (error) {
     console.log(error)
