@@ -5,7 +5,7 @@ const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { paymentRepository } = models;
+const { TransactionModel } = models;
 const crypto = require("crypto");
 const path = require("path");
 
@@ -21,7 +21,7 @@ const razorpay = new Razorpay({
 
 module.exports.createOrder = async (req) => {
   const payment_capture = 1;
-  const { amount, currency } = req.body;
+  const { amount, currency, type } = req.body;
   const options = {
     amount: Number(amount) * 100,
     currency: currency ?? "INR",
@@ -29,7 +29,15 @@ module.exports.createOrder = async (req) => {
     payment_capture,
   };
   try {
-    return await razorpay.orders.create(options);
+    const res = await razorpay.orders.create(options);
+    const body = {
+      paymentId: "",
+      userId: req.userResult._id,
+      type: type ?? "",
+      orderId: res.data.id,
+    };
+    const transaction = await TransactionModel.create(body);
+    return { ...res, transactionId: transaction._id };
   } catch (error) {
     // logger('userError').error(new Error(error.message));
     console.log(error);
@@ -50,7 +58,7 @@ module.exports.verifyPayment = async (req) => {
     // Creating our own digest
     // The format should be like this:
     // digest = hmac_sha256(orderCreationId + "|" + razorpayPaymentId, secret);
-    const shasum = crypto.createHmac("sha256",process.env.key_secret);
+    const shasum = crypto.createHmac("sha256", process.env.key_secret);
     shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
     const digest = shasum.digest("hex");
     console.log("digest", digest, "razor", razorpaySignature);
@@ -84,5 +92,20 @@ module.exports.paymentDetails = async (req) => {
     console.log(error);
     userErrorMessage("addUser", { error, data: req?.body });
     throw new Error(error);
+  }
+};
+
+module.exports.updateTransactionSatus = async (req, res) => {
+  const transactionId = req.params.id
+  const { status, } = req.body;
+  try {
+    await TransactionModel.findByIdAndUpdate(transactionId, {
+      $set: { status: status },
+    });
+   return true
+  } catch (error) {
+    console.log(error)
+    userErrorMessage('forgotPassword', { error, data: user.email });
+    throw Error(error);
   }
 };

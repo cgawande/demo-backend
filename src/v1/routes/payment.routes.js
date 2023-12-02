@@ -12,9 +12,11 @@ const validateMiddleware = require("../middlewares/validate.middleware.js");
 
 const router = Router();
 
-router.post("/payment", paymentController.createOrder);
+router.post("/payment",authMiddleware.checkUserAuth,paymentController.createOrder);
 
-router.get("/payments/:id", paymentController.paymentDetails);
+router.get("/payments/:id",authMiddleware.checkUserAuth, paymentController.paymentDetails);
 
-router.post("/payment/verify", paymentController.verifyPayment);
+router.post("/payment/verify",authMiddleware.checkUserAuth, paymentController.verifyPayment);
+
+router.post("/transaction/:id",authMiddleware.checkUserAuth,paymentController.updateTransactionSatus)
 module.exports = router;

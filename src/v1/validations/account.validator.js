@@ -119,15 +119,20 @@ const userAccountResetPasswordSchema = {
   body: Joi.object().keys({
     token: Joi.string().trim().required(),
     ...passwordCommon,
-    location: Joi.string().trim().min(1).required(),
+    id: Joi.string().required(),
   }),
 };
 
 const userAccountChangePasswordSchema = {
   body: Joi.object().keys({
-    currentPassword: Joi.string().trim().required(),
-    ...passwordCommon,
-    location: Joi.string().trim().min(1).required(),
+    password: Joi.string().trim().required(),
+    newPassword: Joi.string().trim()
+    .min(6)
+    .max(15)
+    .regex(/(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=])(?=.{6,}).*$/)
+    .messages({
+      'string.pattern.base': 'PASSWORD_VALIDATION',
+    })
   }),
 };
 
@@ -213,5 +218,5 @@ module.exports ={
   userAccountLoginSchema,
   sellerAccountLoginSchema,
   editProfileDetailsSchema,
-  userAccountSignUpSchema
+  userAccountSignUpSchema,
 };

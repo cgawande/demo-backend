@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const Transaction = new Schema(
   {
-    transactionId: {
+    paymentId: {
       type: String,
     },
     userId: {
@@ -15,13 +15,18 @@ const Transaction = new Schema(
     },
     type: {
       type: String,
-      enum: ["debit", "credit"],
     },
     status: {
       type: String,
-      enum: ["pending", "completed", "cancel"],
+      enum: ["pending", "completed", "cancel","failed"],
       default: "pending",
     },
+    note:{
+      type: String,
+    },
+    message:{
+      type: String,
+    }
   },
   { timestamps: true }
 );

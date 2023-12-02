@@ -119,3 +119,24 @@ module.exports.updatePassword=async(req,res,next)=>{
     next(error);
   }
 }
+
+
+module.exports.updatewallet=async(req,res,next)=>{
+  try {
+    const result = await userRepository.updateWallet(req);
+    if (result) {
+      res.status(utility.httpStatus('OK')).json({
+        success: true,
+        message: utility.getMessage(req, false, 'SUCCESS'),
+      });
+    } else {
+      res.status(utility.httpStatus('BAD_REQUEST')).json({
+        success: false,
+        data: null,
+        message: utility.getMessage(req, false, 'FALSE_RESPONSE'),
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}

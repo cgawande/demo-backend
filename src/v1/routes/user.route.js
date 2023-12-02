@@ -43,6 +43,7 @@ router.post(
 
 router.post(
   "/reset-password",
+  validateMiddleware(accountValidator.userAccountResetPasswordSchema),
   userMiddleWare.checkResetPasswordToken,
   userMiddleWare.checkUserIdNotExists,
   userController.resetPassword,
@@ -51,6 +52,7 @@ router.post(
 router.post(
   "/change-password",
   authMiddleware.checkUserAuth,
+  validateMiddleware(accountValidator.userAccountChangePasswordSchema),
   userMiddleWare.comparePassword,
   userController.updatePassword,
 );
@@ -90,4 +92,9 @@ router.get(
   userController.getUserList
 );
 
+router.get(
+  "/add-wallet",
+  authMiddleware.checkUserAuth,
+  userController.updatewallet
+);
 module.exports = router;

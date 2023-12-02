@@ -186,3 +186,18 @@ module.exports.findUserAndPasswordUpdate = async (id, password) => {
     throw Error(error);
   }
 }
+
+module.exports.updateWallet = async (req, res) => {
+  const {  amount } = req.body;
+  try {
+    const newAmount = (req?.userResult?.wallet) ?? 0 + amount
+    await userModel.findByIdAndUpdate(req.userResult._id, {
+      $set: { wallet: newAmount, },
+    });
+   return true
+  } catch (error) {
+    console.log(error)
+    userErrorMessage('forgotPassword', { error, data: user.email });
+    throw Error(error);
+  }
+};
