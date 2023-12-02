@@ -201,9 +201,10 @@ module.exports.updateWallet = async (req, res) => {
   const { amount } = req.body;
   try {
     const newAmount = req?.userResult?.wallet ? req?.userResult?.wallet : 0;
+    const total = Number(newAmount) +Number(amount)
     await userModel.updateOne(
       { email: req?.userResult?.email },
-      { $set: { wallet: newAmount + amount } }
+      { $set: { wallet: total } }
     );
     return true;
   } catch (error) {
