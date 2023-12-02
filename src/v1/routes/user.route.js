@@ -38,7 +38,7 @@ router.get(
 router.post(
   "/forgot-password",
   userMiddleWare.checkUSerEmailNotExists,
-  userController.forgotPassword,
+  userController.forgotPassword
 );
 
 router.post(
@@ -46,7 +46,7 @@ router.post(
   validateMiddleware(accountValidator.userAccountResetPasswordSchema),
   userMiddleWare.checkResetPasswordToken,
   userMiddleWare.checkUserIdNotExists,
-  userController.resetPassword,
+  userController.resetPassword
 );
 
 router.post(
@@ -54,7 +54,7 @@ router.post(
   authMiddleware.checkUserAuth,
   validateMiddleware(accountValidator.userAccountChangePasswordSchema),
   userMiddleWare.comparePassword,
-  userController.updatePassword,
+  userController.updatePassword
 );
 
 router.post(
@@ -90,6 +90,12 @@ router.get(
     next();
   },
   userController.getUserList
+);
+
+router.get(
+  "/token",
+  authMiddleware.checkUserAuth,
+  userController.getUserDataByToken
 );
 
 router.get(
