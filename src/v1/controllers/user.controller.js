@@ -118,7 +118,7 @@ module.exports.updatePassword = async (req, res, next) => {
   }
 };
 
-module.exports.updatewallet = async (req, res, next) => {
+module.exports.updateWallet = async (req, res, next) => {
   try {
     const result = await userRepository.updateWallet(req);
     if (result) {

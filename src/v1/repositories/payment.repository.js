@@ -1,4 +1,3 @@
-require("dotenv").config();
 const { Op, Sequelize } = require("sequelize");
 const models = require("../models/index.js");
 const { userErrorMessage } = require("../../logMessages/index.js");
@@ -15,29 +14,30 @@ const shortid = require("shortid");
 const Razorpay = require("razorpay");
 
 const razorpay = new Razorpay({
-  key_id: process.env.key_id,
-  key_secret: process.env.key_secret,
+  key_id: "rzp_test_dv3hsJ5Ue3U5gl",
+  key_secret: "vg4hIiDeNlV6eGmnIhs3aYG2",
 });
 
+let count=1
 module.exports.createOrder = async (req) => {
   const payment_capture = 1;
   const { amount, currency, type } = req.body;
   const options = {
     amount: Number(amount) * 100,
     currency: currency ?? "INR",
-    receipt: shortid.generate(),
-    payment_capture,
+    receipt: shortid.generate()+`${count}`,
   };
+  count++
   try {
-    const res = await razorpay.orders.create(options);
+ const res= await razorpay.orders.create(options);
     const body = {
       paymentId: "",
-      userId: req.userResult._id,
+      userId: req?.userResult._id,
       type: type ?? "",
-      orderId: res.data.id,
+      orderId: res?.id,
     };
     const transaction = await TransactionModel.create(body);
-    return { ...res, transactionId: transaction._id };
+   return  { ...res,transactionId:transaction._id };
   } catch (error) {
     // logger('userError').error(new Error(error.message));
     console.log(error);

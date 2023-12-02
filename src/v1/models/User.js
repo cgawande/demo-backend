@@ -37,6 +37,7 @@ const User = new Schema({
   },
   wallet:{
     type:Number,
+    default:0
   },
   token:{
     type:String,

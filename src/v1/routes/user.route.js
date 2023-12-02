@@ -101,6 +101,6 @@ router.get(
 router.get(
   "/add-wallet",
   authMiddleware.checkUserAuth,
-  userController.updatewallet
+  userController.updateWallet
 );
 module.exports = router;
