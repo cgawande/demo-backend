@@ -4,7 +4,7 @@ const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { TransactionModel } = models;
+const { TransactionModel,userModel } = models;
 const crypto = require("crypto");
 const path = require("path");
 
@@ -54,6 +54,7 @@ module.exports.verifyPayment = async (req) => {
       razorpayPaymentId,
       razorpayOrderId,
       razorpaySignature,
+      amount
     } = req.body;
     // Creating our own digest
     // The format should be like this:
@@ -66,6 +67,12 @@ module.exports.verifyPayment = async (req) => {
     if (digest !== razorpaySignature) {
       return { value: false, msg: "Transaction not legit!" };
     } else {
+      const newAmount = req?.userResult?.wallet ? req?.userResult?.wallet : 0;
+      const total = Number(newAmount) +Number(amount)
+      await userModel.updateOne(
+        { email: req?.userResult?.email },
+        { $set: { wallet: total } }
+      );
       return {
         value: true,
         orderId: razorpayOrderId,
