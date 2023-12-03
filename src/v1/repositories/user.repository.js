@@ -31,7 +31,7 @@ module.exports.userRegister = async (req) => {
 module.exports.userLogin = async (req) => {
   try {
     const user = req.userResult;
-    return this.findTokenExistAndUpdate(user);
+    return await this.findTokenExistAndUpdate(user);
   } catch (error) {
     // userErrorMessage("login", { error, data: req?.body });
     logger("login").error(error);

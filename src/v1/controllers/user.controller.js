@@ -181,7 +181,7 @@ module.exports.getUserData = async (req, res, next) => {
 
 module.exports.deleteUser = async (req, res, next) => {
   try {
-    const result = userRepository.deleteUser(req)
+    const result = await userRepository.deleteUser(req)
     if (result) {
       res.status(utility.httpStatus("OK")).json({
         data: result,
@@ -201,7 +201,7 @@ module.exports.deleteUser = async (req, res, next) => {
 
 module.exports.updateStatus = async (req, res, next) => {
   try {
-    const result = userRepository.updateUserStatus(req)
+    const result = await userRepository.updateUserStatus(req)
     if (result) {
       res.status(utility.httpStatus("OK")).json({
         data: result,
