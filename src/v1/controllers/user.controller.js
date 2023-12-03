@@ -144,7 +144,7 @@ module.exports.getUserDataByToken = async (req, res, next) => {
     const result = await userRepository.findTokenExist(token);
     if (result) {
       res.status(utility.httpStatus("OK")).json({
-        success: result,
+        data: result,
         message: utility.getMessage(req, false, "SUCCESS"),
       });
     } else {
