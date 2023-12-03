@@ -4,7 +4,7 @@ const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { TransactionModel,userModel } = models;
+const { TransactionModel, userModel } = models;
 const crypto = require("crypto");
 const path = require("path");
 
@@ -18,18 +18,18 @@ const razorpay = new Razorpay({
   key_secret: "vg4hIiDeNlV6eGmnIhs3aYG2",
 });
 
-let count=1
+let count = 1
 module.exports.createOrder = async (req) => {
   const payment_capture = 1;
   const { amount, currency, type } = req.body;
   const options = {
     amount: Number(amount) * 100,
     currency: currency ?? "INR",
-    receipt: shortid.generate()+`${count}`,
+    receipt: shortid.generate() + `${count}`,
   };
   count++
   try {
- const res= await razorpay.orders.create(options);
+    const res = await razorpay.orders.create(options);
     const body = {
       paymentId: "",
       userId: req?.userResult._id,
@@ -37,7 +37,7 @@ module.exports.createOrder = async (req) => {
       orderId: res?.id,
     };
     const transaction = await TransactionModel.create(body);
-   return  { ...res,transactionId:transaction._id };
+    return { ...res, transactionId: transaction._id };
   } catch (error) {
     // logger('userError').error(new Error(error.message));
     console.log(error);
@@ -62,16 +62,19 @@ module.exports.verifyPayment = async (req) => {
     const shasum = crypto.createHmac("sha256", process.env.key_secret);
     shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
     const digest = shasum.digest("hex");
-    console.log("digest", digest, "razor", razorpaySignature);
     // comaparing our digest with the actual signature
     if (digest !== razorpaySignature) {
       return { value: false, msg: "Transaction not legit!" };
     } else {
       const newAmount = req?.userResult?.wallet ? req?.userResult?.wallet : 0;
-      const total = Number(newAmount) +Number(amount)
+      const total = Number(newAmount) + Number(amount)
       await userModel.updateOne(
         { email: req?.userResult?.email },
         { $set: { wallet: total } }
+      );
+      await TransactionModel.updateOne(
+        { orderId: razorpayOrderId },
+        { $set: { status: "completed" } }
       );
       return {
         value: true,
@@ -109,7 +112,7 @@ module.exports.updateTransactionSatus = async (req, res) => {
     await TransactionModel.findByIdAndUpdate(transactionId, {
       $set: { status: status },
     });
-   return true
+    return true
   } catch (error) {
     console.log(error)
     userErrorMessage('forgotPassword', { error, data: user.email });
