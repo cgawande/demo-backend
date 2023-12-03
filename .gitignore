@@ -1,8 +1,9 @@
 /node_modules
 /.env
 /env
-
+/logs
 /dist
+/logMessages
 
 # misc
 .DS_Store

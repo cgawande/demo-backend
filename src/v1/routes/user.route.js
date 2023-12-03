@@ -9,6 +9,7 @@ const { accountValidator } = require("../validations/index.js");
 const { USER, USER_LOGIN } = getModule();
 const { userController } = controllers;
 const validateMiddleware = require("../middlewares/validate.middleware.js");
+const { access } = require("fs");
 
 const router = Router();
 
@@ -81,6 +82,39 @@ router.get(
   userController.getUserList
 );
 
+
+router.get(
+  "/users/:id",
+  authMiddleware.checkUserAuth,
+  middlewares.resourceAccessMiddleware(["admin"]),
+  userMiddleWare.checkUserIdNotExists,
+  userController.getUserData
+);
+
+router.put(
+  "/users/:id",
+  authMiddleware.checkUserAuth,
+  middlewares.resourceAccessMiddleware(["admin"]),
+  userMiddleWare.checkUserIdNotExists,
+  userController.updateStatus
+);
+router.delete(
+  "/users/:id",
+  authMiddleware.checkUserAuth,
+  middlewares.resourceAccessMiddleware(["admin"]),
+  userMiddleWare.checkUserIdNotExists,
+  userController.getUserData
+)
+
+router.post(
+  "/users/:id",
+  authMiddleware.checkUserAuth,
+  validateMiddleware(accountValidator.userUpdateRoleSchema),
+  middlewares.resourceAccessMiddleware(["admin"]),
+  userMiddleWare.checkUserIdNotExists,
+  userController.updateUserRole
+)
+
 router.get(
   "/sub-admin",
   authMiddleware.checkUserAuth,
@@ -91,7 +125,6 @@ router.get(
   },
   userController.getUserList
 );
-
 router.get(
   "/token",
   authMiddleware.checkUserAuth,

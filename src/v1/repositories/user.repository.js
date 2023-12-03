@@ -2,7 +2,7 @@ const { Op, Sequelize } = require("sequelize");
 const models = require("../models/index.js");
 const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
-const { logger } = require("../../services/logger.service.js");
+const { logger } = require('../../services/logger.service.js');
 const { bcrypt, jwt, sendEmail } = services;
 const { userModel } = models;
 
@@ -13,14 +13,12 @@ const { userModel } = models;
  */
 module.exports.userRegister = async (req) => {
   try {
-    //console.log(kjjkjkdfjg)
     const { password, confirmPassword, ...rest } = req.body;
     const hashPassword = await bcrypt.createHashPassword(password);
     return await userModel.create({ ...rest, password: hashPassword });
   } catch (error) {
-    // logger('userError').error(new Error(error.message));
     console.log(error);
-    userErrorMessage("addUser", { error, data: req?.body });
+    logger("addUser").error(error);
     throw new Error(error);
   }
 };
@@ -35,7 +33,8 @@ module.exports.userLogin = async (req) => {
     const user = req.userResult;
     return this.findTokenExistAndUpdate(user);
   } catch (error) {
-    userErrorMessage("login", { error, data: req?.body });
+    // userErrorMessage("login", { error, data: req?.body });
+    logger("login").error(error);
     throw new Error(error);
   }
 };
@@ -49,7 +48,8 @@ module.exports.findUserExist = async (where) => {
   try {
     return await userModel.findOne(where);
   } catch (error) {
-    userErrorMessage("findUser", { error, data: where });
+    logger("findUser").error(error);
+    //userErrorMessage("findUser", { error, data: where });
     throw Error(error);
   }
 };
@@ -59,7 +59,8 @@ module.exports.findTokenExist = async (token) => {
     return await userModel.findOne({ token: token });
   } catch (error) {
     console.log(error);
-    userErrorMessage("findUser", { error, data: user.email });
+    logger("findToken").error(error);
+    //userErrorMessage("findToken", { error, data: user.email });
     throw Error(error);
   }
 };
@@ -71,7 +72,8 @@ module.exports.findTokenExistAndUpdate = async (user) => {
     return newtoken;
   } catch (error) {
     console.log(error);
-    userErrorMessage("findUser", { error, data: user.email });
+    logger("tokenUpadate").error(error);
+    //userErrorMessage("tokenUpadate", { error, data: user.email });
     throw Error(error);
   }
 };
@@ -114,7 +116,6 @@ module.exports.getUserList = async (req) => {
 
     // Count the total number of documents for pagination
     const totalCount = await userModel.countDocuments(query);
-
     return {
       users,
       totalPages: Math.ceil(totalCount / limit),
@@ -123,7 +124,8 @@ module.exports.getUserList = async (req) => {
     };
   } catch (error) {
     console.log(error);
-    userErrorMessage("userList", { error, data: req.role });
+    logger("userList").error(error);
+   //userErrorMessage("userList", { error, data: req.role });
     throw Error(error);
   }
 };
@@ -142,7 +144,8 @@ module.exports.forgotPassword = async (req) => {
     };
   } catch (error) {
     console.log(error);
-    userErrorMessage("forgotPassword", { error, data: user.email });
+    logger("forgotPassword").error(error);
+    //userErrorMessage("forgotPassword", { error, data:req.userResult.email });
     throw Error(error);
   }
 };
@@ -159,7 +162,8 @@ module.exports.userResetPassword = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    userErrorMessage("forgotPassword", { error, data: user.email });
+    logger("resetPassword").error(error);
+    //userErrorMessage("resetPassword", { error, data: req?.body });
     throw Error(error);
   }
 };
@@ -178,11 +182,12 @@ module.exports.updatePassword = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    userErrorMessage("forgotPassword", { error, data: user.email });
+    logger("updatePassword").error(error);
+  // userErrorMessage("updatePassword", { error, data: req.userResult.email });
     throw Error(error);
   }
 };
-
+ 
 module.exports.findUserAndPasswordUpdate = async (id, password) => {
   try {
     const hashPassword = await bcrypt.createHashPassword(password);
@@ -192,7 +197,8 @@ module.exports.findUserAndPasswordUpdate = async (id, password) => {
     return true;
   } catch (error) {
     console.log(error);
-    userErrorMessage("findUser", { error, data: user.email });
+    logger("updatePassword").error(error);
+    //userErrorMessage("updatePassword", { error, data: id });
     throw Error(error);
   }
 };
@@ -209,7 +215,53 @@ module.exports.updateWallet = async (req, res) => {
     return true;
   } catch (error) {
     console.log(error);
-    userErrorMessage("forgotPassword", { error, data: user.email });
+    logger("updateWallet").error(error);
+   // userErrorMessage("updateWallet", { error, data:req.body  });
+    throw Error(error);
+  }
+};
+
+module.exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await userModel.deleteOne({ _id: id })
+    return true;
+  } catch (error) {
+    console.log(error);
+    logger("deleteUser").error(error);
+    // userErrorMessage("deleteUser", { error, data: id });
+    throw Error(error);
+  }
+};
+
+module.exports.updateUserStatus = async (req, res) => {
+  let status = req.userResult.isActive
+  if(status){
+    status=false
+  }else{
+    status=true
+  }
+  try {
+    return await this.updateByEmail(req.userResult.email,{isActive:status});
+  } catch (error) {
+    console.log(error);
+    logger("updateStatus").error(error);
+   // userErrorMessage("updateWallet", { error, data:req.body  });
+    throw Error(error);
+  }
+};
+
+module.exports.updateByEmail= async (email ,obj) => {
+  try {
+    await userModel.updateOne(
+      { email: email },
+      { $set: obj }
+    );
+    return true;
+  } catch (error) {
+    console.log(error);
+    logger("updateByEmail").error(error);
+   // userErrorMessage("updateWallet", { error, data:req.body  });
     throw Error(error);
   }
 };

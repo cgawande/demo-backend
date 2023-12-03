@@ -107,7 +107,7 @@ module.exports.checkUserAuth = async (req, res, next) => {
     if (authorization) {
       const token = authorization.split(' ')[1];
       const isTokenExist = await userRepository.findTokenExist(token);
-      if (isTokenExist.token) {
+      if (isTokenExist.token && isTokenExist.isActive) {
         const decodedToken= jwt.verifyToken(token);
         if(decodedToken){
         req.userResult = isTokenExist;

@@ -110,7 +110,10 @@ module.exports.checkResetPasswordToken = async (req, res, next) => {
 
 module.exports.checkUserIdNotExists = async (req, res, next) => {
   try {
-    const { id, token } = req.body;
+    let id = req.body.id;
+    if(!id){
+      id = req?.params?.id
+    }
     const user = await userRepository.findUserExist({_id:id});
     if (!user) {
       return (

@@ -158,3 +158,85 @@ module.exports.getUserDataByToken = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.getUserData = async (req, res, next) => {
+  try {
+    const result = req.userResult;
+    if (result) {
+      res.status(utility.httpStatus("OK")).json({
+        data: result,
+        message: utility.getMessage(req, false, "SUCCESS"),
+      });
+    } else {
+      res.status(utility.httpStatus("BAD_REQUEST")).json({
+        success: false,
+        data: null,
+        message: utility.getMessage(req, false, "FALSE_RESPONSE"),
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.deleteUser = async (req, res, next) => {
+  try {
+    const result = userRepository.deleteUser(req)
+    if (result) {
+      res.status(utility.httpStatus("OK")).json({
+        data: result,
+        message: utility.getMessage(req, false, "SUCCESS"),
+      });
+    } else {
+      res.status(utility.httpStatus("BAD_REQUEST")).json({
+        success: false,
+        data: null,
+        message: utility.getMessage(req, false, "FALSE_RESPONSE"),
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.updateStatus = async (req, res, next) => {
+  try {
+    const result = userRepository.updateUserStatus(req)
+    if (result) {
+      res.status(utility.httpStatus("OK")).json({
+        data: result,
+        message: utility.getMessage(req, false, "SUCCESS"),
+      });
+    } else {
+      res.status(utility.httpStatus("BAD_REQUEST")).json({
+        success: false,
+        data: null,
+        message: utility.getMessage(req, false, "FALSE_RESPONSE"),
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.updateUserRole = async (req, res, next) => {
+  try {
+    const email=req.userResult.email
+    const role = req?.body?.role
+    const result = userRepository.updateByEmail(email,{role:role})
+    if (result) {
+      res.status(utility.httpStatus("OK")).json({
+        data: result,
+        message: utility.getMessage(req, false, "SUCCESS"),
+      });
+    } else {
+      res.status(utility.httpStatus("BAD_REQUEST")).json({
+        success: false,
+        data: null,
+        message: utility.getMessage(req, false, "FALSE_RESPONSE"),
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}; 
