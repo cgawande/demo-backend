@@ -103,7 +103,7 @@ router.delete(
   authMiddleware.checkUserAuth,
   middlewares.resourceAccessMiddleware(["admin"]),
   userMiddleWare.checkUserIdNotExists,
-  userController.getUserData
+  userController.deleteUser
 )
 
 router.post(
