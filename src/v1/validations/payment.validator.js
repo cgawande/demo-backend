@@ -214,16 +214,5 @@ const createOrderSchema= {
   }),
 };
 module.exports ={
-  userAccountSignupSchema,
-  userAdminAccountLoginSchema,
-  userAccountForgetPasswordSchema,
-  editProfileSchema,
-  userAccountResetPasswordSchema,
-  userAccountChangePasswordSchema,
-  userAccountLoginSchema,
-  sellerAccountLoginSchema,
-  editProfileDetailsSchema,
-  userAccountSignUpSchema,
-  userUpdateRoleSchema,
   createOrderSchema
 };
