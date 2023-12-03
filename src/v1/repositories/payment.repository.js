@@ -35,6 +35,7 @@ module.exports.createOrder = async (req) => {
       userId: req?.userResult._id,
       type: type ?? "",
       orderId: res?.id,
+      amount:amount
     };
     const transaction = await TransactionModel.create(body);
     return { ...res, transactionId: transaction._id };

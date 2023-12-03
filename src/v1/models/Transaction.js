@@ -13,6 +13,9 @@ const Transaction = new Schema(
     orderId:{
         type: String, 
     },
+    amount:{
+      type: number, 
+    },
     type: {
       type: String,
     },
