@@ -14,7 +14,7 @@ const Transaction = new Schema(
         type: String, 
     },
     amount:{
-      type: number, 
+      type: Number, 
     },
     type: {
       type: String,
