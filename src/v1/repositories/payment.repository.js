@@ -4,7 +4,7 @@ const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { TransactionModel, userModel } = models;
+const { Transaction, User } = models;
 const crypto = require("crypto");
 const path = require("path");
 
@@ -18,7 +18,7 @@ const razorpay = new Razorpay({
   key_secret: "vg4hIiDeNlV6eGmnIhs3aYG2",
 });
 
-let count = 1
+let count = 1;
 module.exports.createOrder = async (req) => {
   const payment_capture = 1;
   const { amount, currency, type } = req.body;
@@ -27,18 +27,19 @@ module.exports.createOrder = async (req) => {
     currency: currency ?? "INR",
     receipt: shortid.generate() + `${count}`,
   };
-  count++
+  count++;
   try {
     const res = await razorpay.orders.create(options);
     const body = {
       paymentId: "",
-      userId: req?.userResult._id,
+      userId: req?.userResult.id,
       type: type ?? "",
       orderId: res?.id,
-      amount:amount
+      amount: amount,
     };
-    const transaction = await TransactionModel.create(body);
-    return { ...res, transactionId: transaction._id };
+    console.log(body)
+    const transaction = await Transaction.create(body);
+    return { ...res, transactionId: transaction.id };
   } catch (error) {
     // logger('userError').error(new Error(error.message));
     console.log(error);
@@ -55,7 +56,7 @@ module.exports.verifyPayment = async (req) => {
       razorpayPaymentId,
       razorpayOrderId,
       razorpaySignature,
-      amount
+      amount,
     } = req.body;
     // Creating our own digest
     // The format should be like this:
@@ -68,14 +69,14 @@ module.exports.verifyPayment = async (req) => {
       return { value: false, msg: "Transaction not legit!" };
     } else {
       const newAmount = req?.userResult?.wallet ? req?.userResult?.wallet : 0;
-      const total = Number(newAmount) + Number(amount)
-      await userModel.updateOne(
-        { email: req?.userResult?.email },
-        { $set: { wallet: total } }
+      const total = Number(newAmount) + Number(amount);
+      await User.update(
+        { wallet: total },
+        { where: { email: req?.userResult?.email } }
       );
-      await TransactionModel.updateOne(
-        { orderId: razorpayOrderId },
-        { $set: { status: "completed" } }
+      await Transaction.update(
+        { status: "completed" },
+        { where: { orderId: razorpayOrderId } }
       );
       return {
         value: true,
@@ -107,16 +108,16 @@ module.exports.paymentDetails = async (req) => {
 };
 
 module.exports.updateTransactionSatus = async (req, res) => {
-  const transactionId = req.params.id
-  const { status, } = req.body;
+  const transactionId = req.params.id;
+  const { status } = req.body;
   try {
-    await TransactionModel.findByIdAndUpdate(transactionId, {
-      $set: { status: status },
+    await Transaction.update({ status: status }, {
+      where: { id: transactionId },
     });
-    return true
+    return true;
   } catch (error) {
-    console.log(error)
-    userErrorMessage('forgotPassword', { error, data: user.email });
+    console.log(error);
+    userErrorMessage("forgotPassword", { error, data: user.email });
     throw Error(error);
   }
 };
