@@ -68,7 +68,7 @@ router.post(
     req.body.role = "sub-admin";
     next();
   },
-  userController.createUserSignUP
+  userController.createSubAdmin
 );
 
 router.get(

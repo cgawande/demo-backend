@@ -127,6 +127,9 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Transaction, {
       foreignKey: "userId",
     });
+    // User.hasMany(models.PermissionRole, {
+    //   foreignKey: "userId",
+    // });
     // User.hasMany(models.ProviderService, {
     //   foreignKey: 'userId',
     //   onUpdate: 'cascade',

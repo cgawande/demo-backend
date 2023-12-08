@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(100),
       },
       userId: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.INTEGER,
       },
       amount: {
         type: DataTypes.INTEGER,

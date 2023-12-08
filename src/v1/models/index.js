@@ -17,8 +17,8 @@ const sequelize = new Sequelize(
       acquire: 60000,
     },
     logging: (message) => {
-      //   logger.infoLogger.info(message);
-      // console.log(message);
+        //logger.infoLogger.info(message);
+      console.log(message);
     },
     dialect: 'mysql',
   }

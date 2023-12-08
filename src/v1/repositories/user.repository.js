@@ -4,7 +4,7 @@ const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { User } = models;
+const { User,Permission,PermissionRole } = models;
 
 /**
  * Create user
@@ -22,7 +22,6 @@ module.exports.userRegister = async (req) => {
     throw new Error(error);
   }
 };
-
 /**
  * login user
  * @param {object} req
@@ -267,5 +266,24 @@ module.exports.updateByEmail = async (email, obj) => {
     logger("updateByEmail").error(error);
     // userErrorMessage("updateWallet", { error, data:req.body  });
     throw Error(error);
+  }
+};
+
+
+module.exports.createSubAdmin = async (req) => {
+  try {
+    const {Permission, password, confirmPassword, ...rest } = req.body;
+    const hashPassword = await bcrypt.createHashPassword(password);
+   const res = await User.create({ ...rest, password: hashPassword });
+   if(res){
+   const result = Permission.map(async(e)=>{
+    PermissionRole.create({permissionId:e.id,userId:res.id})
+   })
+     return await promises.all(result)
+  }
+  } catch (error) {
+    console.log(error);
+    logger("createSubAdmin").error(error);
+    throw new Error(error);
   }
 };

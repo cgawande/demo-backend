@@ -205,6 +205,7 @@ const userAccountSignUpSchema = {
     .max(100)
     .required(),
   }),
+  permissions:Joi.any().optional()
 };
 const userUpdateRoleSchema = {
   body: Joi.object().keys({

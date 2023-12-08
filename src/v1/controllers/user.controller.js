@@ -240,3 +240,24 @@ module.exports.updateUserRole = async (req, res, next) => {
     next(error);
   }
 }; 
+
+module.exports.createSubAdmin = async (req, res, next) => {
+  try {
+    const result = await userRepository.createSubAdmin(req);
+    if (result) {
+      res.status(utility.httpStatus("CREATED")).json({
+        success: true,
+        data: "success",
+        message: utility.getMessage(req, false, "USER_CREATED"),
+      });
+    } else {
+      res.status(utility.httpStatus("BAD_REQUEST")).json({
+        success: false,
+        data: null,
+        message: utility.getMessage(req, false, "FALSE_RESPONSE"),
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
