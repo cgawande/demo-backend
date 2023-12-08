@@ -272,14 +272,14 @@ module.exports.updateByEmail = async (email, obj) => {
 
 module.exports.createSubAdmin = async (req) => {
   try {
-    const {Permission, password, confirmPassword, ...rest } = req.body;
+    const {permissions, password, confirmPassword, ...rest } = req.body;
     const hashPassword = await bcrypt.createHashPassword(password);
    const res = await User.create({ ...rest, password: hashPassword });
-   if(res){
-   const result = Permission.map(async(e)=>{
+   if(res && permissions.length){
+   const result = permissions.map(async(e)=>{
     PermissionRole.create({permissionId:e.id,userId:res.id})
    })
-     return await promises.all(result)
+     return await Promise.all(result)
   }
   } catch (error) {
     console.log(error);
