@@ -21,7 +21,7 @@ router.get(
   permissionController.getPermissionList
 );
 router.get(
-  "/user/permission/:id",
+  "/permission/:id",
   //authMiddleware.checkUserAuth,
   permissionController.getPermissionList
 );
