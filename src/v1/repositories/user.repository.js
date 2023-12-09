@@ -291,12 +291,14 @@ module.exports.createSubAdmin = async (req) => {
 
 async function generateUniqueRandomNumber() {
   let randomFourDigitNumber;
+  let existingRecord;
   do {
     // Generate a random four-digit number
     randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
     // Check if the number already exists in the database
-    const existingRecord = await User.findOne({
-      where: { cscId: `CSC-${randomFourDigitNumber}` },
+    randomFourDigitNumber = `CSC-${randomFourDigitNumber}`
+     existingRecord = await User.findOne({
+      where: { cscId:randomFourDigitNumber},
     });
     // If the number already exists, continue the loop to generate a new one
   } while (existingRecord);
