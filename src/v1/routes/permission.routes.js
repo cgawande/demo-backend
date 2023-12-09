@@ -17,13 +17,29 @@ const router = Router();
 
 router.get(
   "/permission",
-  //authMiddleware.checkUserAuth,
+  authMiddleware.checkUserAuth,
   permissionController.getPermissionList
 );
 router.get(
   "/permission/:id",
-  //authMiddleware.checkUserAuth,
+  authMiddleware.checkUserAuth,
   permissionController.getPermissionList
+);
+
+router.post(
+  "/permission",
+  authMiddleware.checkUserAuth,
+  validateMiddleware(accountValidator.permissionSchema),
+  middlewares.resourceAccessMiddleware(["admin"]),
+  permissionController.addPermission
+);
+
+router.put(
+  "/permission/:id",
+  authMiddleware.checkUserAuth,
+  validateMiddleware(accountValidator.permissionSchema),
+  middlewares.resourceAccessMiddleware(["admin"]),
+  permissionController.updatePermission
 );
 
 module.exports = router;

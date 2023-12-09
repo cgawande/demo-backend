@@ -21,3 +21,25 @@ module.exports.getPermissionList = async (req) => {
     throw Error(error);
   }
 };
+
+module.exports.addPermission = async (req) => {
+  try {
+      return await Permission.create(req.body);
+  } catch (error) {
+    logger("addPermission").error(error);
+    //userErrorMessage("userList", { error, data: req.role });
+    throw Error(error);
+  }
+};
+
+module.exports.updatePermission = async (req) => {
+  const {id}= req.params
+  try {
+      await Permission.update(req.body,{where:{id:id}});
+      return true
+  } catch (error) {
+    logger("updatePermission").error(error);
+    //userErrorMessage("userList", { error, data: req.role });
+    throw Error(error);
+  }
+};

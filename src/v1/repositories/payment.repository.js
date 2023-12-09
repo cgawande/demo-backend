@@ -37,7 +37,6 @@ module.exports.createOrder = async (req) => {
       orderId: res?.id,
       amount: amount,
     };
-    console.log(body)
     const transaction = await Transaction.create(body);
     return { ...res, transactionId: transaction.id };
   } catch (error) {

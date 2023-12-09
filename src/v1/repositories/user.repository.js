@@ -4,7 +4,7 @@ const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { User,Permission,PermissionRole } = models;
+const { User, Permission, PermissionRole } = models;
 
 /**
  * Create user
@@ -15,7 +15,8 @@ module.exports.userRegister = async (req) => {
   try {
     const { password, confirmPassword, ...rest } = req.body;
     const hashPassword = await bcrypt.createHashPassword(password);
-    return await User.create({ ...rest, password: hashPassword });
+    const cscId = await generateUniqueRandomNumber();
+    return await User.create({ ...rest, cscId: cscId, password: hashPassword });
   } catch (error) {
     console.log(error);
     logger("addUser").error(error);
@@ -56,7 +57,7 @@ module.exports.findUserExist = async (where) => {
 
 module.exports.findTokenExist = async (token) => {
   try {
-   return await User.findOne({ where: { token: token } });
+    return await User.findOne({ where: { token: token } });
   } catch (error) {
     console.log(error);
     logger("findToken").error(error);
@@ -97,7 +98,7 @@ module.exports.getUserList = async (req) => {
     } = req.query;
     // Create a base query
     const limitNumber = +limit;
-    let where = { role: req.role};
+    let where = { role: req.role };
     // If search parameter is provided, use it to filter by username or email
     if (search) {
       where = {
@@ -113,7 +114,7 @@ module.exports.getUserList = async (req) => {
       where[filterField] = filterValue;
     }
     // Perform the query with pagination and excluding the password field
-    const users = await  User.scope('activeUser').findAll({
+    const users = await User.scope("activeUser").findAll({
       attributes: { exclude: ["password", "token"] },
       where,
       offset: (page - 1) * limitNumber,
@@ -241,8 +242,8 @@ module.exports.deleteUser = async (req, res) => {
 
 module.exports.updateUserStatus = async (req, res) => {
   let status = req.userResult.status;
-  console.log(status,"stattus")
-  if (status==="active") {
+  console.log(status, "stattus");
+  if (status === "active") {
     status = "inactive";
   } else {
     status = "active";
@@ -259,7 +260,7 @@ module.exports.updateUserStatus = async (req, res) => {
 
 module.exports.updateByEmail = async (email, obj) => {
   try {
-    await User.update(obj, { where: { email: email }});
+    await User.update(obj, { where: { email: email } });
     return true;
   } catch (error) {
     console.log(error);
@@ -269,21 +270,36 @@ module.exports.updateByEmail = async (email, obj) => {
   }
 };
 
-
 module.exports.createSubAdmin = async (req) => {
   try {
-    const {permissions, password, confirmPassword, ...rest } = req.body;
+    const { permissions, password, confirmPassword, ...rest } = req.body;
     const hashPassword = await bcrypt.createHashPassword(password);
-   const res = await User.create({ ...rest, password: hashPassword });
-   if(res && permissions.length){
-   const result = permissions.map(async(e)=>{
-    PermissionRole.create({permissionId:e.id,userId:res.id})
-   })
-     return await Promise.all(result)
-  }
+    const cscId = await generateUniqueRandomNumber();
+    const res = await User.create({ ...rest, cscId: cscId, password: hashPassword });
+    if (res && permissions.length) {
+      const result = permissions.map(async (e) => {
+        PermissionRole.create({ permissionId: e.id, userId: res.id });
+      });
+      return await Promise.all(result);
+    }
   } catch (error) {
     console.log(error);
     logger("createSubAdmin").error(error);
     throw new Error(error);
   }
 };
+
+async function generateUniqueRandomNumber() {
+  let randomFourDigitNumber;
+  do {
+    // Generate a random four-digit number
+    randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000);
+    // Check if the number already exists in the database
+    const existingRecord = await User.findOne({
+      where: { cscId: `CSC-${randomFourDigitNumber}` },
+    });
+    // If the number already exists, continue the loop to generate a new one
+  } while (existingRecord);
+  // At this point, randomFourDigitNumber is unique
+  return randomFourDigitNumber;
+}

@@ -235,6 +235,12 @@ const userUpdateRoleSchema = {
     role: Joi.string().trim().valid("user", "sub-admin").required(),
   }),
 };
+
+const permissionSchema= {
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+  }),
+};
 module.exports = {
   userAccountSignupSchema,
   userAdminAccountLoginSchema,
@@ -247,4 +253,5 @@ module.exports = {
   editProfileDetailsSchema,
   userAccountSignUpSchema,
   userUpdateRoleSchema,
+  permissionSchema
 };
