@@ -97,7 +97,7 @@ module.exports.getUserList = async (req) => {
     } = req.query;
     // Create a base query
     const limitNumber = +limit;
-    let where = { role: req.role ,status:"active"};
+    let where = { role: req.role};
     // If search parameter is provided, use it to filter by username or email
     if (search) {
       where = {
@@ -106,7 +106,6 @@ module.exports.getUserList = async (req) => {
           { email: { [Op.like]: `%${search}%` } },
         ],
         role: req.role,
-        status:"active"
       };
     }
     // If filter parameters are provided, use them to filter by a specific field and value
@@ -114,7 +113,7 @@ module.exports.getUserList = async (req) => {
       where[filterField] = filterValue;
     }
     // Perform the query with pagination and excluding the password field
-    const users = await User.findAll({
+    const users = await  User.scope('activeUser').findAll({
       attributes: { exclude: ["password", "token"] },
       where,
       offset: (page - 1) * limitNumber,
