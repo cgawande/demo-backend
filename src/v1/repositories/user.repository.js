@@ -97,7 +97,7 @@ module.exports.getUserList = async (req) => {
     } = req.query;
     // Create a base query
     const limitNumber = +limit;
-    let where = { role: req.role };
+    let where = { role: req.role ,status:"active"};
     // If search parameter is provided, use it to filter by username or email
     if (search) {
       where = {
@@ -106,6 +106,7 @@ module.exports.getUserList = async (req) => {
           { email: { [Op.like]: `%${search}%` } },
         ],
         role: req.role,
+        status:"active"
       };
     }
     // If filter parameters are provided, use them to filter by a specific field and value
