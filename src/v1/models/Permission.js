@@ -22,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
   Permission.loadScopes = () => {};
 
   Permission.associate = (models) => {
-    // Permission.hasMany(models.PermissionRole, {
-    //   foreignKey: "permissionId",
-    // });
+    Permission.hasMany(models.PermissionRole, {
+      foreignKey: "permissionId",
+    });
   };
   return Permission;
 };
