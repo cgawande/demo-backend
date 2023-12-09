@@ -228,8 +228,7 @@ module.exports.updateWallet = async (req, res) => {
 module.exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
-    return await User.update(
-      { status: "deleted", deletedById: req?.userResult?.id },
+    return await User.destroy(
       { where: { id: id } }
     );
   } catch (error) {
