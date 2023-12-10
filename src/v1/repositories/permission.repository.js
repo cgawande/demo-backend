@@ -43,3 +43,35 @@ module.exports.updatePermission = async (req) => {
     throw Error(error);
   }
 };
+
+
+
+module.exports.updateSubAdminPermission = async (req) => {
+  const {id}= req.params
+  const {permissions } =req.body
+  try {
+    if (permissions.length) {
+      await this.deleteSubAdminPermission(req)
+      const result = permissions.map(async (e) => {
+        PermissionRole.create({ permissionId: e.id, userId: id });
+      });
+      return await Promise.all(result);
+    }
+  } catch (error) {
+    logger("updatePermission").error(error);
+    //userErrorMessage("userList", { error, data: req.role });
+    throw Error(error);
+  }
+};
+
+
+module.exports.deleteSubAdminPermission = async (req) => {
+  const {id}= req.params
+  try {
+    const res =await PermissionRole.destroy({where:{userId:id}})
+  } catch (error) {
+    logger("updatePermission").error(error);
+    //userErrorMessage("userList", { error, data: req.role });
+    throw Error(error);
+  }
+};

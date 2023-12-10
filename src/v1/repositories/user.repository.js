@@ -46,7 +46,7 @@ module.exports.userLogin = async (req) => {
  */
 module.exports.findUserExist = async (where) => {
   try {
-    return await User.findOne({ where: where });
+    return await User.findOne({ where: where,include:[{model:PermissionRole,include:{model:Permission}}] });
   } catch (error) {
     console.log(error);
     logger("findUser").error(error);
@@ -280,6 +280,8 @@ module.exports.createSubAdmin = async (req) => {
         PermissionRole.create({ permissionId: e.id, userId: res.id });
       });
       return await Promise.all(result);
+    }else{
+      return res
     }
   } catch (error) {
     console.log(error);

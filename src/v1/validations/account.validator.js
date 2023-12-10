@@ -227,7 +227,7 @@ const userAccountSignUpSchema = {
       .min(6)
       .max(100)
       .required(),
-    permissions: Joi.array().optional(),
+    permissions: Joi.array().optional().items(Joi.string()).default([]),
   }),
 };
 const userUpdateRoleSchema = {

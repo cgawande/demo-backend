@@ -21,11 +21,16 @@ router.get(
   permissionController.getPermissionList
 );
 router.get(
-  "/permission/:id",
+  "/user/permission/:id",
   authMiddleware.checkUserAuth,
   permissionController.getPermissionList
 );
-
+router.post(
+  "/user/permission/:id",
+  authMiddleware.checkUserAuth,
+  middlewares.resourceAccessMiddleware(["admin"]),
+  permissionController.updateSubAdminPermission
+);
 router.post(
   "/permission",
   authMiddleware.checkUserAuth,
@@ -41,5 +46,6 @@ router.put(
   middlewares.resourceAccessMiddleware(["admin"]),
   permissionController.updatePermission
 );
+
 
 module.exports = router;
