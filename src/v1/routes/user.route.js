@@ -60,10 +60,10 @@ router.post(
 
 router.post(
   "/register/sub-admin",
-  //authMiddleware.checkUserAuth,
+  authMiddleware.checkUserAuth,
   userMiddleWare.checkUserEmailExistsAlready,
   validateMiddleware(accountValidator.userAccountSignUpSchema),
-  //middlewares.resourceAccessMiddleware(["admin"]),
+  middlewares.resourceAccessMiddleware(["admin"]),
   (req, res, next) => {
     req.body.role = "sub-admin";
     next();
