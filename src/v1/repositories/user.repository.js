@@ -1,10 +1,10 @@
-const { Op, Sequelize } = require("sequelize");
+const { Op, Sequelize, Transaction } = require("sequelize");
 const models = require("../models/index.js");
 const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { User, Permission, PermissionRole } = models;
+const { User, Permission, PermissionRole ,Transaction} = models;
 
 /**
  * Create user
@@ -229,7 +229,7 @@ module.exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
     return await User.destroy(
-      { where: { id: id },include:[{model:PermissionRole}] }
+      { where: { id: id },include:[{model:PermissionRole},{model:Transaction}] }
     );
   } catch (error) {
     console.log(error);
