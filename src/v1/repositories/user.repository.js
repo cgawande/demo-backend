@@ -1,4 +1,4 @@
-const { Op, Sequelize, Transaction } = require("sequelize");
+const { Op, Sequelize} = require("sequelize");
 const models = require("../models/index.js");
 const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
