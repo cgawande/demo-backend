@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
   PermissionRole.loadScopes = () => {};
 
   PermissionRole.associate = (models) => {
-    PermissionRole.hasMany(models.Permission, {
+    PermissionRole.belongsTo(models.Permission, {
       foreignKey: "permissionId",
     });
     PermissionRole.belongsTo(models.User, {
