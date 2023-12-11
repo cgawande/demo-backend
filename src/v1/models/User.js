@@ -126,9 +126,11 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Transaction, {
       foreignKey: "userId",
+      onDelete: 'cascade',
     });
     User.hasMany(models.PermissionRole, {
       foreignKey: "userId",
+       onDelete: 'cascade',
     });
     // User.hasMany(models.ProviderService, {
     //   foreignKey: 'userId',

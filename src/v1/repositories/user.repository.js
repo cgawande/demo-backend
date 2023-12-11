@@ -229,7 +229,7 @@ module.exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
     return await User.destroy(
-      { where: { id: id },include:[{model:PermissionRole},{model:Transaction}] }
+      { where: { id: id } }
     );
   } catch (error) {
     console.log(error);

@@ -27,9 +27,11 @@ module.exports = (sequelize, DataTypes) => {
   PermissionRole.associate = (models) => {
     PermissionRole.belongsTo(models.Permission, {
       foreignKey: "permissionId",
+      onDelete: 'cascade',
     });
     PermissionRole.belongsTo(models.User, {
       foreignKey: "userId",
+      onDelete: 'cascade',
     });
   };
   return PermissionRole;

@@ -11,7 +11,7 @@ module.exports.getPermissionList = async (req) => {
     const { id } = req?.params;
     const where = {};
     if (id) {
-      return await User.findAll({ where: {id:id}, include:[{model:PermissionRole,include:{model:Permission}}] });
+      return await User.findAll({ where: {id:id}, include:{model:Permission} });
     }
     return await Permission.findAll({ where: where });
   } catch (error) {
