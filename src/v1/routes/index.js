@@ -1,8 +1,10 @@
 const { Router } = require('express');
 const path = require('path');
-const userRoutes = require('./user.route')
-const paymentRoutes = require('./payment.routes')
-const permission = require('./permission.routes')
+const userRoutes = require('./user.route');
+const paymentRoutes = require('./payment.routes');
+const permission = require('./permission.routes');
+const product  = require("./product.routes");
+const media = require("./media.route");
 
 const router = Router();
 const register = (app) => {
@@ -13,6 +15,6 @@ const register = (app) => {
     //   res.sendFile(path.join(`${path.resolve('./')}/../../build/index.html`));
     // }
   });
-  router.use('/api/v1', [userRoutes,paymentRoutes,permission]);
+  router.use('/api/v1', [userRoutes,paymentRoutes,permission,product,media]);
 };
 module.exports = register;

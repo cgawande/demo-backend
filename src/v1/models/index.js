@@ -18,7 +18,7 @@ const sequelize = new Sequelize(
     },
     logging: (message) => {
         //logger.infoLogger.info(message);
-      // console.log(message);
+      //  console.log(message);
     },
     dialect: 'mysql',
   }

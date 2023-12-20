@@ -132,6 +132,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
        onDelete: 'cascade',
     });
+    User.hasMany(models.Product, {
+      foreignKey: "userId",
+       onDelete: 'cascade',
+    });
     // User.hasMany(models.ProviderService, {
     //   foreignKey: 'userId',
     //   onUpdate: 'cascade',

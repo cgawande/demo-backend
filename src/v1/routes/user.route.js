@@ -14,14 +14,14 @@ const { access } = require("fs");
 const router = Router();
 
 router.post(
-  USER.slug,
+ "/signup",
   userMiddleWare.checkUserEmailExistsAlready,
   validateMiddleware(accountValidator.userAccountSignUpSchema),
   userController.createUserSignUP
 );
 
 router.post(
-  USER_LOGIN.slug,
+ "/login",
   userMiddleWare.checkUSerEmailNotExists,
   userMiddleWare.comparePassword,
   userController.createUserLogin
