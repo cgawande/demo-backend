@@ -128,7 +128,7 @@ router.get(
 router.get(
   "/wallet",
   authMiddleware.checkUserAuth,
-  userController.getUserDataByToken
+  userController.getWalletBalance
 );
 
 router.post(
