@@ -17,7 +17,6 @@ const router = Router();
 
 router.get(
   "/product",
-  authMiddleware.checkUserAuth,
   productController.getProductList
 );
 router.get(
