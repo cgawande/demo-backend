@@ -35,7 +35,7 @@ module.exports.createOrder = async (req) => {
       userId: req?.userResult.id,
       type: type ?? "",
       orderId: res?.id,
-      amount: amount,
+      chargeAmount: amount,
     };
     const transaction = await Transaction.create(body);
     return { ...res, transactionId: transaction.id };
@@ -67,12 +67,12 @@ module.exports.verifyPayment = async (req) => {
     if (digest !== razorpaySignature) {
       return { value: false, msg: "Transaction not legit!" };
     } else {
-      const newAmount = req?.userResult?.wallet ? req?.userResult?.wallet : 0;
-      const total = Number(newAmount) + Number(amount);
-      await User.update(
-        { wallet: total },
-        { where: { email: req?.userResult?.email } }
-      );
+      // const newAmount = req?.userResult?.wallet ? req?.userResult?.wallet : 0;
+      // const total = Number(newAmount) + Number(amount);
+      // await User.update(
+      //   { wallet: total },
+      //   { where: { email: req?.userResult?.email } }
+      // );
       await Transaction.update(
         { status: "completed" },
         { where: { orderId: razorpayOrderId } }

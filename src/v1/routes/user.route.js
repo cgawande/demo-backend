@@ -126,7 +126,7 @@ router.get(
   userController.getUserList
 );
 router.get(
-  "/token",
+  "/wallet",
   authMiddleware.checkUserAuth,
   userController.getUserDataByToken
 );

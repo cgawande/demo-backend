@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       orderId: {
         type: DataTypes.STRING(255),
       },
+      chargeAmount:{
+        type: DataTypes.INTEGER,
+      },
       status: {
         type: DataTypes.ENUM("pending", "completed", "cancel", "failed"),
         defaultValue: "pending",

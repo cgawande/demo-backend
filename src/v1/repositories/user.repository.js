@@ -66,6 +66,38 @@ module.exports.findTokenExist = async (token) => {
   }
 };
 
+module.exports.getWalletBalance= async (red) => {
+  try {
+   const completedCreditSum = await Transaction.sum('chargeAmount', {
+    where: {
+      status: 'completed',
+      type: 'credit',
+      userId:req.userResult.id,
+      chargeAmount: { [Sequelize.Op.not]: null },
+    },
+  });
+
+  const completedDebitSum = await Transaction.sum('amount', {
+    where: {
+      status: 'completed',
+      type: 'debit',
+      userId:req.userResult.id,
+      amount: { [Sequelize.Op.not]: null },
+    },
+  });
+
+  const netAmount = completedCreditSum - completedDebitSum;
+  return netAmount;
+  } catch (error) {
+    console.log(error);
+    logger("getWalletBalance").error(error);
+    //userErrorMessage("findToken", { error, data: user.email });
+    throw Error(error);
+  }
+};
+
+
+
 module.exports.findTokenExistAndUpdate = async (user) => {
   try {
     const newtoken = await jwt.createToken({
