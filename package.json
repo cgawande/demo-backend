@@ -21,7 +21,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@img/sharp-linux-x64": "^0.33.1",
     "aws-sdk": "^2.1520.0",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
