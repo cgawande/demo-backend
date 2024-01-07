@@ -66,10 +66,3 @@ module.exports.addProduct = async (req, res, next) => {
       next(error);
     }
   };
-
-
-
-
-
-
-  //{cscId:"",productIds:[1,2,3,4,5]}

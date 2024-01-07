@@ -59,49 +59,6 @@ module.exports.insertMedia = async (req, productId) => {
   }
 };
 
-module.exports.updatePermission = async (req) => {
-  const { id } = req.params;
-  try {
-    await Permission.update(req.body, { where: { id: id } });
-    return true;
-  } catch (error) {
-    logger("updatePermission").error(error);
-    //userErrorMessage("userList", { error, data: req.role });
-    throw Error(error);
-  }
-};
-
-module.exports.updateSubAdminPermission = async (req) => {
-  const { id } = req.params;
-  const { permissions } = req.body;
-  try {
-    if (permissions.length) {
-      await this.deleteSubAdminPermission(req);
-      const result = permissions.map(async (e) => {
-        PermissionRole.create({ permissionId: e.id, userId: id });
-      });
-      return await Promise.all(result);
-    }
-  } catch (error) {
-    logger("updatePermission").error(error);
-    //userErrorMessage("userList", { error, data: req.role });
-    throw Error(error);
-  }
-};
-
-module.exports.deleteSubAdminPermission = async (req) => {
-  const { id } = req.params;
-  try {
-    const res = await PermissionRole.destroy({ where: { userId: id } });
-  } catch (error) {
-    logger("updatePermission").error(error);
-    //userErrorMessage("userList", { error, data: req.role });
-    throw Error(error);
-  }
-};
-
-
-
 module.exports.checkProductExist = async (req) => {
   const { userResult, body } = req;
   try {
@@ -123,14 +80,14 @@ module.exports.checkProductExist = async (req) => {
 };
 
 module.exports.assignProductToSubAdmin = async (req) => {
-  const {body:{cscId,userIds} } = req;
+  const {body:{cscId,productIds} } = req;
   try {
      return await Product.update(
         { assignUser: cscId }, // Adjust this according to your update requirements
         {
           where: {
             userId: {
-              [Sequelize.Op.in]: userIds,
+              [Sequelize.Op.in]: productIds,
             },
             cscId: cscId,
           },
