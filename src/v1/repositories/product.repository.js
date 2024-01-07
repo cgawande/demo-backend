@@ -19,7 +19,7 @@ module.exports.getProductList = async (req) => {
     return await Product.findAll({ where: where , include: [{ model:ProductMedia, }]});
   } catch (error) {
     console.log(error);
-    logger("getPermission").error(error);
+    logger("getProductList").error(error);
     //userErrorMessage("userList", { error, data: req.role });
     throw Error(error);
   }
