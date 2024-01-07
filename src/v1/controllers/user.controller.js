@@ -161,20 +161,11 @@ module.exports.getUserDataByToken = async (req, res, next) => {
 
 module.exports.getWalletBalance = async (req, res, next) => {
   try {
-    const token = req.userResult;
     const result = await userRepository.getWalletBalance(req);
-    if (result) {
       res.status(utility.httpStatus("OK")).json({
-        data: result,
+        balance: result,
         message: utility.getMessage(req, false, "SUCCESS"),
       });
-    } else {
-      res.status(utility.httpStatus("BAD_REQUEST")).json({
-        success: false,
-        data: null,
-        message: utility.getMessage(req, false, "FALSE_RESPONSE"),
-      });
-    }
   } catch (error) {
     next(error);
   }

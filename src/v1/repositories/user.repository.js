@@ -66,7 +66,7 @@ module.exports.findTokenExist = async (token) => {
   }
 };
 
-module.exports.getWalletBalance= async (red) => {
+module.exports.getWalletBalance= async (req) => {
   try {
    const completedCreditSum = await Transaction.sum('chargeAmount', {
     where: {
@@ -85,8 +85,9 @@ module.exports.getWalletBalance= async (red) => {
       amount: { [Sequelize.Op.not]: null },
     },
   });
-
-  const netAmount = completedCreditSum - completedDebitSum;
+console.log(completedCreditSum,completedDebitSum)
+  const netAmount = (completedCreditSum ?? 0) - (completedDebitSum ?? 0);
+  console.log( netAmount)
   return netAmount;
   } catch (error) {
     console.log(error);

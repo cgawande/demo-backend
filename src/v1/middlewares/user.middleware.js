@@ -135,7 +135,6 @@ module.exports.checkProductExist = async (req, res, next) => {
         message: "Your previous application is pending,you can not submit again",
       });
     } else {
-      req.userResult = user;
       next();
     }
   } catch (error) {

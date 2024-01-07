@@ -33,7 +33,7 @@ module.exports.createOrder = async (req) => {
     const body = {
       paymentId: "",
       userId: req?.userResult.id,
-      type: type ?? "",
+      type: type ?? "credit",
       orderId: res?.id,
       chargeAmount: amount,
     };

@@ -39,8 +39,8 @@ router.post(
     Object.assign(body, params);
     next();
   },
-  userMiddleWare.checkProductExist,
   mediaController.uploadMediaFile,
+  userMiddleWare.checkProductExist,
   mediaController.saveMedia,
   productController.addProduct
 

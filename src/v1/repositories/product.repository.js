@@ -103,13 +103,13 @@ module.exports.deleteSubAdminPermission = async (req) => {
 
 
 module.exports.checkProductExist = async (req) => {
-  const { userResult: { id }, body: { type, updateType } } = req;
+  const { userResult, body } = req;
   try {
-    return Product.findOne({
+ return await Product.findOne({
       where: {
-        userId: id,
-        type: type,
-        updateType: updateType,
+        userId: userResult.id,
+        type: body.type,
+        updateType: body.updateType,
         status: {
           [Op.notIn]: ["reCheck", "completed", "cancel", "failed"],
         },
