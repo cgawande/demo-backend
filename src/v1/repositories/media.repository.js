@@ -210,7 +210,7 @@ module.exports.uploadMediaFile = async(req, res, next) =>{
         }));
        const mediaArr= await MediaTemp.bulkCreate(mediaDataArray);
        req.mediaArr = mediaArr;
-       next()
+      return true;
       } catch (error) {
         console.log(error)
         throw Error(error);

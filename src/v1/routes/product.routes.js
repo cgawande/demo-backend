@@ -34,6 +34,13 @@ router.post(
   productController.addProduct
 
 );
+router.put(
+  "/permission/:id",
+  authMiddleware.checkUserAuth,
+  validateMiddleware(accountValidator.permissionSchema),
+  middlewares.resourceAccessMiddleware(["admin"]),
+  permissionController.updatePermission
+);
 
 router.post(
   "/assign",

@@ -20,11 +20,9 @@ module.exports.uploadMedia = async (req, res, next) => {
 module.exports.saveMedia = async (req, res, next) => {
   try {
     const result = await mediaRepository.createMultiple(req,res,next);
-    // res.status(utility.httpStatus("CREATED")).json({
-    //   success: true,
-    //   data: result,
-    //   message: "",
-    // });
+  if(result){
+    next()
+  }s
   } catch (error) {
     next(error);
   }

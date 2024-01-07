@@ -79,6 +79,7 @@ module.exports.checkProductExist = async (req) => {
   }
 };
 
+
 module.exports.assignProductToSubAdmin = async (req) => {
   const {body:{cscId,productIds} } = req;
   try {
