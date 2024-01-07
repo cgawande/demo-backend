@@ -8,19 +8,15 @@ const { User, Permission, PermissionRole, Product, ProductMedia } = models;
 
 module.exports.getProductList = async (req) => {
   try {
-    const { id } = req?.params;
-    const { userResult } = req;
+    const { userResult ,params:{id}} = req;
     const where = {};
+    if(id){
+      return await Product.findOne({ where: { id:id }, include: [{ model: ProductMedia, }] });
+    }
     if (userResult.role === "sub-admin") {
       return await Product.findAll({ where: { assignUser: userResult.id }, include: [{ model: ProductMedia, }] });
     }
-    if (id) {
-      return await User.findAll({
-        where: { id: id },
-        include: [{ model: PermissionRole, include: { model: Permission } }],
-      });
-    }
-    return await Product.findAll({ where: where, include: [{ model: ProductMedia, }] });
+    return await Product.findAll({ where: where, include: [{ model: ProductMedia}] });
   } catch (error) {
     console.log(error);
     logger("getProductList").error(error);

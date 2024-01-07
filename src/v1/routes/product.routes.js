@@ -21,6 +21,13 @@ router.get(
   middlewares.resourceAccessMiddleware(["admin", "sub-admin"]),
   productController.getProductList
 );
+router.get(
+  "/product/:id",
+  authMiddleware.checkUserAuth,
+  middlewares.resourceAccessMiddleware(["admin", "sub-admin"]),
+  productController.getProductList
+);
+
 router.put(
   "/product/:id",
   authMiddleware.checkUserAuth,
