@@ -10,7 +10,7 @@ const {
 } = require("../validations/index.js");
 
 const { USER, USER_LOGIN } = getModule();
-const { productController,permissionController,mediaController } = controllers;
+const { productController, permissionController, mediaController } = controllers;
 const validateMiddleware = require("../middlewares/validate.middleware.js");
 
 const router = Router();
@@ -18,9 +18,15 @@ const router = Router();
 router.get(
   "/product",
   authMiddleware.checkUserAuth,
-  middlewares.resourceAccessMiddleware(["admin","sub-admin"]),
+  middlewares.resourceAccessMiddleware(["admin", "sub-admin"]),
   productController.getProductList
 );
+router.put(
+  "/product/:id",
+  authMiddleware.checkUserAuth,
+  middlewares.resourceAccessMiddleware(["admin", "sub-admin"]),
+  productController.changeProductStatus);
+
 router.post(
   "/product/:mediaFor",
   authMiddleware.checkUserAuth,

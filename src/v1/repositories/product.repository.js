@@ -97,7 +97,6 @@ module.exports.assignProductToSubAdmin = async (req) => {
         },
       }
     );
-    console.log(res)
     return res;
   } catch (error) {
     console.log(error)
@@ -107,3 +106,18 @@ module.exports.assignProductToSubAdmin = async (req) => {
   }
 };
 
+module.exports.changeProductStatus = async (req) => {
+  const {body, params: { id } } = req;
+  try {
+    return await Product.update({ status: body.status }, {
+      where: {
+        assignUser: userResult.id,
+        id: id,
+      }
+    });
+  } catch (error) {
+    logger("changeProductStatus").error(error);
+    //userErrorMessage("userList", { error, data: req.role });
+    throw Error(error);
+  }
+};
