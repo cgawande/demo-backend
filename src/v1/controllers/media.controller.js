@@ -22,7 +22,7 @@ module.exports.saveMedia = async (req, res, next) => {
     const result = await mediaRepository.createMultiple(req,res,next);
   if(result){
     next()
-  }s
+  }
   } catch (error) {
     next(error);
   }
