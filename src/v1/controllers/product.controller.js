@@ -48,6 +48,7 @@ module.exports.addProduct = async (req, res, next) => {
 
   module.exports.assignProductToSubAdmin = async (req, res, next) => {
     try {
+      console.log(req.body)
       const result = await productRepository.assignProductToSubAdmin(req);
       if (result) {
         res.status(utility.httpStatus('OK')).json({

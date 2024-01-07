@@ -81,20 +81,22 @@ module.exports.checkProductExist = async (req) => {
 
 
 module.exports.assignProductToSubAdmin = async (req) => {
-  const {body:{cscId,productIds} } = req;
+  const {body:{userId,productIds} ,userResult} = req;
   try {
-     return await Product.update(
-        { assignUser: cscId }, // Adjust this according to your update requirements
+   const res =  await Product.update(
+        { assignUser: userId,status:"assigned" }, // Adjust this according to your update requirements
         {
           where: {
-            userId: {
+            id: {
               [Sequelize.Op.in]: productIds,
-            },
-            cscId: cscId,
+            }
           },
         }
       );
+      console.log(res)
+      return res;
   } catch (error) {
+    console.log(error)
     logger("productExist").error(error);
     //userErrorMessage("userList", { error, data: req.role });
     throw Error(error);
