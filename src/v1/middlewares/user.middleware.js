@@ -1,4 +1,4 @@
-const userRepository = require("../repositories/user.repository");
+const {userRepository,productRepository }= require("../repositories/index.js");
 const utility = require("../../utils/index.js");
 const services = require("../../services/index.js");
 const { bcrypt, jwt } = services;
@@ -114,6 +114,25 @@ module.exports.checkUserIdNotExists = async (req, res, next) => {
         success: false,
         data: null,
         message: utility.getMessage(req, false, "USER_NOT_EXIST"),
+      });
+    } else {
+      req.userResult = user;
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports.checkProductExist = async (req, res, next) => {
+  try {
+    const result = await productRepository.checkProductExist(req)
+    if (result) {
+      return res.status(utility.httpStatus("CONFLICT")).json({
+        success: false,
+        data: null,
+        message: "Your previous application is pending,you can not submit again",
       });
     } else {
       req.userResult = user;

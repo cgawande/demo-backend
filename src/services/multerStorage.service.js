@@ -3,7 +3,7 @@ const path = require('path')
 const AWS = require('aws-sdk') 
 const multer = require('multer') 
 const multerS3 = require('multer-s3-transform') 
-const sharp = require('sharp') 
+// const sharp = require('sharp') 
 const config = require('../config') 
 
 const allowedFormats = {
@@ -73,30 +73,30 @@ const storageAWS = multerS3({
   shouldTransform(req, file, cb) {
     cb(null, /^image/i.test(file.mimetype));
   },
-  transforms: [
-    {
-      id: 'original',
-      key(req, file, cb) {
-        const { mediaFor } = req.params;
-        const dir = mediaFor;
-        cb(null, `${dir}/${file.newFileName}`);
-      },
-      transform(req, file, cb) {
-        cb(null, sharp().png());
-      },
-    },
-    {
-      id: 'thumbnail',
-      key(req, file, cb) {
-        const { mediaFor } = req.params;
-        const dir = `${mediaFor}/thumb`;
-        cb(null, `${dir}/${file.newFileName}`);
-      },
-      transform(req, file, cb) {
-        cb(null, sharp().resize({ width: 200 }).png());
-      },
-    },
-  ],
+  // transforms: [
+  //   {
+  //     id: 'original',
+  //     key(req, file, cb) {
+  //       const { mediaFor } = req.params;
+  //       const dir = mediaFor;
+  //       cb(null, `${dir}/${file.newFileName}`);
+  //     },
+  //     transform(req, file, cb) {
+  //       cb(null, sharp().png());
+  //     },
+  //   },
+  //   {
+  //     id: 'thumbnail',
+  //     key(req, file, cb) {
+  //       const { mediaFor } = req.params;
+  //       const dir = `${mediaFor}/thumb`;
+  //       cb(null, `${dir}/${file.newFileName}`);
+  //     },
+  //     transform(req, file, cb) {
+  //       cb(null, sharp().resize({ width: 200 }).png());
+  //     },
+  //   },
+  // ],
 });
 
 // using below function for local file system diskStorage

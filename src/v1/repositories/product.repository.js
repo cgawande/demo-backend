@@ -16,7 +16,7 @@ module.exports.getProductList = async (req) => {
         include: [{ model: PermissionRole, include: { model: Permission } }],
       });
     }
-    return await Product.findAll({ where: where , include: [{ model:ProductMedia, }]});
+    return await Product.findAll({ where: where, include: [{ model: ProductMedia, }] });
   } catch (error) {
     console.log(error);
     logger("getProductList").error(error);
@@ -31,8 +31,8 @@ module.exports.addProduct = async (req) => {
     const body = { ...req.body, userId: userId };
     delete body.files;
     const res = await Product.create(body);
-    const result= await  this.insertMedia(req,res.id)
-    return {result:res,mediaArr:req.mediaArr}
+    const result = await this.insertMedia(req, res.id)
+    return { result: res, mediaArr: req.mediaArr }
   } catch (error) {
     console.log(error)
     logger("addProduct").error(error);
@@ -41,16 +41,16 @@ module.exports.addProduct = async (req) => {
   }
 };
 
-module.exports.insertMedia = async (req,productId) => {
+module.exports.insertMedia = async (req, productId) => {
   try {
     const mediaArr = req.mediaArr;
     const mediaDataArray = mediaArr.map((file) => ({
-     productId:productId,
-     name:file.name,
-     basePath:file.basePath,
-     baseUrl:file.baseUrl
+      productId: productId,
+      name: file.name,
+      basePath: file.basePath,
+      baseUrl: file.baseUrl
     }));
-   return await ProductMedia.bulkCreate(mediaDataArray);
+    return await ProductMedia.bulkCreate(mediaDataArray);
   } catch (error) {
     console.log(error)
     logger("insertMedia").error(error);
@@ -95,6 +95,28 @@ module.exports.deleteSubAdminPermission = async (req) => {
     const res = await PermissionRole.destroy({ where: { userId: id } });
   } catch (error) {
     logger("updatePermission").error(error);
+    //userErrorMessage("userList", { error, data: req.role });
+    throw Error(error);
+  }
+};
+
+
+
+module.exports.checkProductExist = async (req) => {
+  const { userResult: { id }, body: { type, updateType } } = req;
+  try {
+    return Product.findOne({
+      where: {
+        userId: id,
+        type: type,
+        updateType: updateType,
+        status: {
+          [Op.notIn]: ["reCheck", "completed", "cancel", "failed"],
+        },
+      }
+    });
+  } catch (error) {
+    logger("productExist").error(error);
     //userErrorMessage("userList", { error, data: req.role });
     throw Error(error);
   }
