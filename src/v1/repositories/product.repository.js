@@ -9,7 +9,11 @@ const { User, Permission, PermissionRole, Product, ProductMedia } = models;
 module.exports.getProductList = async (req) => {
   try {
     const { id } = req?.params;
+    const { userResult } = req;
     const where = {};
+    if (userResult.role === "sub-admin") {
+      return await Product.findAll({ where: { assignUser: userResult.id }, include: [{ model: ProductMedia, }] });
+    }
     if (id) {
       return await User.findAll({
         where: { id: id },
@@ -62,7 +66,7 @@ module.exports.insertMedia = async (req, productId) => {
 module.exports.checkProductExist = async (req) => {
   const { userResult, body } = req;
   try {
- return await Product.findOne({
+    return await Product.findOne({
       where: {
         userId: userResult.id,
         type: body.type,
@@ -81,20 +85,20 @@ module.exports.checkProductExist = async (req) => {
 
 
 module.exports.assignProductToSubAdmin = async (req) => {
-  const {body:{userId,productIds} ,userResult} = req;
+  const { body: { userId, productIds }, userResult } = req;
   try {
-   const res =  await Product.update(
-        { assignUser: userId,status:"assigned" }, // Adjust this according to your update requirements
-        {
-          where: {
-            id: {
-              [Sequelize.Op.in]: productIds,
-            }
-          },
-        }
-      );
-      console.log(res)
-      return res;
+    const res = await Product.update(
+      { assignUser: userId, status: "assigned" }, // Adjust this according to your update requirements
+      {
+        where: {
+          id: {
+            [Sequelize.Op.in]: productIds,
+          }
+        },
+      }
+    );
+    console.log(res)
+    return res;
   } catch (error) {
     console.log(error)
     logger("productExist").error(error);

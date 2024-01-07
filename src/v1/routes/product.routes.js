@@ -17,6 +17,8 @@ const router = Router();
 
 router.get(
   "/product",
+  authMiddleware.checkUserAuth,
+  middlewares.resourceAccessMiddleware(["admin","sub-admin"]),
   productController.getProductList
 );
 router.post(
