@@ -19,17 +19,6 @@ router.get(
   "/product",
   productController.getProductList
 );
-router.get(
-  "/user/permission/:id",
-  authMiddleware.checkUserAuth,
-  permissionController.getPermissionList
-);
-router.post(
-  "/user/permission/:id",
-  authMiddleware.checkUserAuth,
-  middlewares.resourceAccessMiddleware(["admin"]),
-  permissionController.updateSubAdminPermission
-);
 router.post(
   "/product/:mediaFor",
   authMiddleware.checkUserAuth,
@@ -46,13 +35,11 @@ router.post(
 
 );
 
-router.put(
-  "/permission/:id",
+router.post(
+  "/assign",
   authMiddleware.checkUserAuth,
-  validateMiddleware(accountValidator.permissionSchema),
   middlewares.resourceAccessMiddleware(["admin"]),
-  permissionController.updatePermission
+  productController.assignProductToSubAdmin
 );
-
 
 module.exports = router;

@@ -29,7 +29,7 @@ router.post("/transaction/:id",
     authMiddleware.checkUserAuth,
     paymentController.updateTransactionSatus)
 
-    router.post("/product/payment",
+router.post("/product/payment",
     authMiddleware.checkUserAuth,
     paymentController.makePayment)
 

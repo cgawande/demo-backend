@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path')
 const AWS = require('aws-sdk');
 const multer = require('multer');
-const sharp = require('sharp');
+// const sharp = require('sharp');
 const HttpStatus = require('http-status');
 const config = require('../../config');
 const models = require('../models');
@@ -46,14 +46,14 @@ const { Op, literal } = models.Sequelize;
             `/public/uploads/${mediaFor}/thumb/`,
           );
           const fileName = req?.file?.path.split(`${mediaFor}`);
-          sharp(req.file.path)
-            .resize(200, 200)
-            .sharpen()
-            .toFile(`${fileDir}${fileName[1]}`, (err) => {
-              if (err) {
-                this.error = err;
-              }
-            });
+          // sharp(req.file.path)
+          //   .resize(200, 200)
+          //   .sharpen()
+          //   .toFile(`${fileDir}${fileName[1]}`, (err) => {
+          //     if (err) {
+          //       this.error = err;
+          //     }
+          //   });
         }
         next();
       });
