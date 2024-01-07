@@ -1,33 +1,32 @@
 const { Op, Sequelize } = require("sequelize");
 const models = require("../models/index.js");
+const crypto = require("crypto");
+const path = require("path");
+const cors = require("cors");
+const shortid = require("shortid");
+const Razorpay = require("razorpay");
+
 const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
 const { Transaction, User } = models;
-const crypto = require("crypto");
-const path = require("path");
+const userRepository = require("./user.repository.js")
 
-const cors = require("cors");
-
-const shortid = require("shortid");
-const Razorpay = require("razorpay");
 
 const razorpay = new Razorpay({
   key_id: "rzp_test_dv3hsJ5Ue3U5gl",
   key_secret: "vg4hIiDeNlV6eGmnIhs3aYG2",
 });
 
-let count = 1;
 module.exports.createOrder = async (req) => {
   const payment_capture = 1;
   const { amount, currency, type } = req.body;
   const options = {
     amount: Number(amount) * 100,
     currency: currency ?? "INR",
-    receipt: shortid.generate() + `${count}`,
+    receipt: shortid.generate() + `${Date.now()}`,
   };
-  count++;
   try {
     const res = await razorpay.orders.create(options);
     const body = {
@@ -117,6 +116,42 @@ module.exports.updateTransactionSatus = async (req, res) => {
   } catch (error) {
     console.log(error);
     userErrorMessage("forgotPassword", { error, data: user.email });
+    throw Error(error);
+  }
+};
+
+
+module.exports.makePayment = async (req, res) => {
+  const { amount } = req.body
+  try {
+    const balance = await userRepository.getWalletBalance(req);
+    if(balance<amount){
+      return {
+        value:false,
+        message:"You dont have a sufficient balance please recharge your wallet"
+      }
+    }else{
+      let minimumBalance = balance - amount;
+      if(minimumBalance <100){
+        return {
+          value:false,
+          message:"Please maintain wallet balance Rs 100,please recharge your wallet"
+        }
+      }else{
+        const body = {
+          paymentId: "",
+          userId: req?.userResult.id,
+          type: "debit",
+          status:"completed",
+          amount: amount,
+        };
+        const transaction = await Transaction.create(body);
+        return { value:true,message:"success" ,transactionId: transaction.id };
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    logger("makePayment").error(error);
     throw Error(error);
   }
 };

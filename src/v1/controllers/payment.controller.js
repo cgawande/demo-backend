@@ -89,3 +89,25 @@ module.exports.createOrder = async (req, res, next) => {
       next(error);
     }
   };
+
+
+  module.exports.makePayment = async (req, res, next) => {
+    try {
+      const {value,message} = await paymentRepository.makePayment(req);
+      if (value) {
+        res.status(utility.httpStatus('OK')).json({
+          success: true,
+          data: null,
+          message: utility.getMessage(req, false, 'SUCCESS'),
+        });
+      } else {
+        res.status(utility.httpStatus('BAD_REQUEST')).json({
+          success: false,
+          data: null,
+          message: message,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
