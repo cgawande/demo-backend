@@ -90,7 +90,6 @@ module.exports.createOrder = async (req, res, next) => {
     }
   };
 
-
   module.exports.makePayment = async (req, res, next) => {
     try {
       const {value,message} = await paymentRepository.makePayment(req);

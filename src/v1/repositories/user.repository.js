@@ -85,7 +85,6 @@ module.exports.getWalletBalance= async (req) => {
       amount: { [Sequelize.Op.not]: null },
     },
   });
-console.log(completedCreditSum,completedDebitSum)
   const netAmount = (completedCreditSum ?? 0) - (completedDebitSum ?? 0);
   console.log( netAmount)
   return netAmount;
