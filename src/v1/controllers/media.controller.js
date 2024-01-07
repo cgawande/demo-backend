@@ -19,10 +19,10 @@ module.exports.uploadMedia = async (req, res, next) => {
 
 module.exports.saveMedia = async (req, res, next) => {
   try {
-    const result = await mediaRepository.createMultiple(req,res,next);
-  if(result){
-    next()
-  }
+    const result = await mediaRepository.createMultiple(req, res, next);
+    if (result) {
+      next()
+    }
   } catch (error) {
     next(error);
   }
@@ -30,7 +30,7 @@ module.exports.saveMedia = async (req, res, next) => {
 
 module.exports.uploadMediaFile = async (req, res, next) => {
   try {
-     await mediaRepository.uploadMultipleMediaFile(req, res, next);
+    await mediaRepository.uploadMultipleMediaFile(req, res, next);
   } catch (error) {
     next(error);
   }
