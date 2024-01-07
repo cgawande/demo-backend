@@ -10,3 +10,6 @@
 {"level":"info","message":"Server is running at 8088 port","timestamp":"2024-01-07T07:39:31.630Z"}
 {"level":"info","message":"Database connected successfully","timestamp":"2024-01-07T07:39:31.747Z"}
 {"level":"info","message":"Database sync successfully","timestamp":"2024-01-07T07:39:31.788Z"}
+{"level":"info","message":"Server is running at 8088 port","timestamp":"2024-01-07T07:46:08.218Z"}
+{"level":"info","message":"Database connected successfully","timestamp":"2024-01-07T07:46:08.320Z"}
+{"level":"info","message":"Database sync successfully","timestamp":"2024-01-07T07:46:08.359Z"}
