@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             userId: {
                 type: DataTypes.INTEGER,
             },
+            status: {
+                type: DataTypes.ENUM("pending","completed","approved", "cancel"),
+                defaultValue: "pending",
+              },
             Remark: {
                 type: DataTypes.STRING(255),
             },

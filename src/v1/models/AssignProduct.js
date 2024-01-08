@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
             message: {
                 type: DataTypes.STRING(305),
             },
+            status: {
+                type: DataTypes.ENUM("pending", "completed",),
+                defaultValue: "pending",
+            },
         },
         {
             underscored: true,
