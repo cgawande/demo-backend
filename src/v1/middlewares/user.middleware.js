@@ -141,3 +141,21 @@ module.exports.checkProductExist = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.checkProductAlreadyExist = async (req, res, next) => {
+  try {
+    const result = await productRepository.checkProductExist(req)
+    if (result) {
+     req.body.productId=result.id
+     next();
+    } else {
+      return res.status(utility.httpStatus("CONFLICT")).json({
+        success: false,
+        data: null,
+        message: "Your don't have any pending application ,please submit Application",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};

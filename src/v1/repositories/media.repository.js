@@ -196,9 +196,12 @@ module.exports.uploadMediaFile = async(req, res, next) =>{
    */
     module.exports.createMultiple = async (req,res,next) =>{
       const {
-        params, files, headers, connection,
+        params, files,file, headers, connection,
       } = req;
       try {
+        if(file?.filename){
+          files.push(file)
+        }
         const HTTPs = connection.encrypted === undefined ? 'http' : 'https';
         const mediaDataArray = files.map((file) => ({
           name: file.filename,

@@ -24,6 +24,28 @@ module.exports.addProduct = async (req, res, next) => {
     }
   };
 
+  module.exports.addVerifyProduct = async (req, res, next) => {
+    try {
+      const result = await productRepository.addVerifyProduct(req);
+      if (result) {
+        res.status(utility.httpStatus('CREATED')).json({
+          success: true,
+          data: result,
+          message: utility.getMessage(req, false, 'SUCCESS'),
+        });
+      } else {
+        res.status(utility.httpStatus('BAD_REQUEST')).json({
+          success: false,
+          data: null,
+          message: utility.getMessage(req, false, 'FALSE_RESPONSE'),
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
+
+
   module.exports.getProductList = async (req, res, next) => {
     try {
       const result = await productRepository.getProductList(req);

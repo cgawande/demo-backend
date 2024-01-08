@@ -4,7 +4,7 @@ const { userErrorMessage } = require("../../logMessages/index.js");
 const services = require("../../services/index.js");
 const { logger } = require("../../services/logger.service.js");
 const { bcrypt, jwt, sendEmail } = services;
-const { User, Permission, PermissionRole, Product, ProductMedia } = models;
+const { User, Permission, PermissionRole, Product, ProductMedia, AssignProduct,VerifyProduct } = models;
 
 module.exports.getProductList = async (req) => {
   try {
@@ -18,7 +18,7 @@ module.exports.getProductList = async (req) => {
     }
     if (userResult.role === "sub-admin") {
       where.assignUser = userResult.id
-      return await Product.findAll({ where: where, include: [{ model: ProductMedia, }] });
+      return await AssignProduct.findAll({ where: where, include: [{ model: User, }, { model: Product, include: { model: ProductMedia } }] });
     }
     return await Product.findAll({ where: where, include: [{ model: ProductMedia }] });
   } catch (error) {
@@ -44,6 +44,30 @@ module.exports.addProduct = async (req) => {
     throw Error(error);
   }
 };
+
+module.exports.addVerifyProduct = async (req) => {
+  try {
+    const userId = req.userResult.id;
+    const {applicantName,phoneNumber,aadharNumber,aadharUpdateDetails,productId} = req.body
+    const option={
+      applicantName:applicantName,
+      phoneNumber:phoneNumber,
+      enrollementNumber:aadharNumber,
+      aadharUpdateDetails:aadharUpdateDetails,
+      productId:productId,
+      userId:userId,
+    }
+    const res = await VerifyProduct.create(option);
+    const result = await this.insertMedia(req, res.id)
+    return { result: res, mediaArr: req.mediaArr }
+  } catch (error) {
+    console.log(error)
+    logger("addVerifyProduct").error(error);
+    //userErrorMessage("userList", { error, data: req.role });
+    throw Error(error);
+  }
+};
+
 
 module.exports.insertMedia = async (req, productId) => {
   try {
@@ -72,7 +96,7 @@ module.exports.checkProductExist = async (req) => {
         type: body.type,
         updateType: body.updateType,
         status: {
-          [Op.notIn]: ["reCheck", "completed", "cancel", "failed"],
+          [Op.notIn]: ["reCheck", "completed","approved","cancel", "failed"],
         },
       }
     });
@@ -87,20 +111,14 @@ module.exports.checkProductExist = async (req) => {
 module.exports.assignProductToSubAdmin = async (req) => {
   const { body: { userId, productIds }, userResult } = req;
   try {
-    const res = await Product.update(
-      { assignUser: userId, status: "assigned" }, // Adjust this according to your update requirements
-      {
-        where: {
-          id: {
-            [Sequelize.Op.in]: productIds,
-          }
-        },
-      }
-    );
-    return res;
+    const productData= productIds.map((ele) => ({
+     userId: userId,
+     productId:ele
+    }));
+   return await AssignProduct.bulkCreate(productData);
   } catch (error) {
     console.log(error)
-    logger("productExist").error(error);
+    logger("assignProduct").error(error);
     //userErrorMessage("userList", { error, data: req.role });
     throw Error(error);
   }

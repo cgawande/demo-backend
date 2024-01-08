@@ -36,6 +36,16 @@ module.exports.uploadMediaFile = async (req, res, next) => {
   }
 };
 
+module.exports.uploadSingleMediaFile = async (req, res, next) => {
+  try {
+    await mediaRepository.uploadMediaFile (req, res, next);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 module.exports.test = async (req, res, next) => {
   try {
     const result = await mediaRepository.uploadMultipleMedia(req);

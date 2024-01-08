@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(255),
       },
       status: {
-        type: DataTypes.ENUM("pending","assigned","reCheck","completed", "cancel", "failed"),
+        type: DataTypes.ENUM("pending","assigned","reCheck","completed","approved", "cancel", "failed"),
         defaultValue: "pending",
       },
       type: {
@@ -48,9 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       isDocumentVerified:{
         type: DataTypes.BOOLEAN,
         defaultValue:false
-      },
-      assignUser:{
-        type: DataTypes.INTEGER,
       },
       Remark: {
         type: DataTypes.STRING(255),
@@ -99,10 +96,15 @@ module.exports = (sequelize, DataTypes) => {
     Product.belongsTo(models.User, {
       foreignKey: "userId",
     });
-    Product.belongsTo(models.User, {
-        foreignKey: "assignUser",
-      });
       Product.hasMany(models.ProductMedia, {
+        foreignKey: "productId",
+        onDelete: 'cascade',
+      });
+      Product.hasOne(models.AssignProduct, {
+        foreignKey: "productId",
+        onDelete: 'cascade',
+      });
+      Product.hasOne(models.VerifyProduct, {
         foreignKey: "productId",
         onDelete: 'cascade',
       });

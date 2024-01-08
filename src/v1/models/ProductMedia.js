@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING(255),
       },
+      type:{
+        type: DataTypes.ENUM("productMedia","verifyMedia"),
+        defaultValue: "productMedia",
+      },
       basePath: {
         type: DataTypes.TEXT,
       },

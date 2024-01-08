@@ -49,6 +49,23 @@ router.post(
   productController.addProduct
 
 );
+
+
+router.post(
+  "/verify/product/:mediaFor",
+  authMiddleware.checkUserAuth,
+  (req, res, next) => {
+    const { params, body } = req;
+    params.apiName = 'media';
+    Object.assign(body, params);
+    next();
+  },
+  mediaController.uploadMediaFile,
+  mediaController.uploadSingleMediaFile,
+  userMiddleWare.checkProductExist,
+  mediaController.saveMedia,
+  productController.addVerifyProduct
+);
 router.put(
   "/permission/:id",
   authMiddleware.checkUserAuth,
